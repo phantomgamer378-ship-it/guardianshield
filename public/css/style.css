@@ -1,0 +1,1680 @@
+/* ============================================================
+   GuardianShield — Premium Dark Dashboard
+   Edit variables in :root to retheme the entire UI instantly
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Sora:wght@400;600;700;800&display=swap');
+
+/* ============================================================
+   1. DESIGN TOKENS — edit here to retheme everything
+   ============================================================ */
+:root {
+    /* Brand colours */
+    --col-bg: #07090f;
+    /* page background */
+    --col-surface: #0d1117;
+    /* card / panel background */
+    --col-surface-2: #161b27;
+    /* elevated card */
+    --col-border: rgba(255, 255, 255, 0.07);
+    --col-border-glow: rgba(99, 102, 241, 0.35);
+
+    /* Accent palette */
+    --col-accent: #6366f1;
+    /* indigo */
+    --col-accent-2: #8b5cf6;
+    /* violet */
+    --col-accent-3: #06b6d4;
+    /* cyan */
+    --col-danger: #ef4444;
+    --col-warning: #f59e0b;
+    --col-success: #10b981;
+
+    /* Text */
+    --col-text: #e2e8f0;
+    --col-text-muted: #64748b;
+    --col-text-dim: #334155;
+
+    /* Glow intensities — set to 0 to disable glows */
+    --glow-accent: 0 0 30px rgba(99, 102, 241, 0.25);
+    --glow-danger: 0 0 20px rgba(239, 68, 68, 0.25);
+    --glow-success: 0 0 20px rgba(16, 185, 129, 0.25);
+    --glow-card: 0 8px 32px rgba(0, 0, 0, 0.5);
+
+    /* Layout */
+    --nav-h: 68px;
+    --radius-card: 20px;
+    --radius-btn: 12px;
+    --radius-pill: 999px;
+
+    /* Animation speeds */
+    --dur-fast: 150ms;
+    --dur-med: 300ms;
+    --dur-slow: 600ms;
+
+    /* Sidebar width (desktop) */
+    --sidebar-w: 240px;
+}
+
+/* ============================================================
+   2. RESET & BASE
+   ============================================================ */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background-color: var(--col-bg);
+    color: var(--col-text);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Sora', sans-serif;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* ============================================================
+   3. SCROLLBAR
+   ============================================================ */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--col-surface);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--col-text-dim);
+    border-radius: 99px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--col-accent);
+}
+
+/* ============================================================
+   4. ANIMATED BACKGROUND — subtle grid + moving orbs
+   ============================================================ */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background:
+        radial-gradient(ellipse 80% 50% at 20% 10%, rgba(99, 102, 241, 0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(139, 92, 246, 0.10) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 30% at 60% 20%, rgba(6, 182, 212, 0.07) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+}
+
+/* ============================================================
+   5. NAVBAR
+   ============================================================ */
+.gs-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--nav-h);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    background: rgba(13, 17, 23, 0.75);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid var(--col-border);
+}
+
+.gs-nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 1.125rem;
+    letter-spacing: -0.03em;
+}
+
+.gs-nav-brand .logo-shield {
+    width: 34px;
+    height: 34px;
+    background: linear-gradient(135deg, var(--col-accent), var(--col-accent-2));
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--glow-accent);
+}
+
+.gs-nav-brand .logo-shield svg {
+    color: #fff;
+    width: 18px;
+    height: 18px;
+}
+
+.gs-nav-spacer {
+    flex: 1;
+}
+
+.gs-nav-pill {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: var(--radius-pill);
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    color: var(--col-success);
+    letter-spacing: 0.01em;
+}
+
+.gs-nav-pill .pulse-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--col-success);
+    box-shadow: 0 0 8px var(--col-success);
+    animation: pulse-dot 2s infinite;
+}
+
+@keyframes pulse-dot {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: scale(0.75);
+    }
+}
+
+/* Profile dropdown button */
+.gs-profile-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 10px 6px 14px;
+    background: var(--col-surface-2);
+    border: 1px solid var(--col-border);
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+    transition: border-color var(--dur-med), box-shadow var(--dur-med);
+    margin-left: 14px;
+}
+
+.gs-profile-btn:hover {
+    border-color: var(--col-accent);
+    box-shadow: 0 0 12px rgba(99, 102, 241, 0.2);
+}
+
+.gs-profile-btn .user-name-text {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--col-text);
+}
+
+.gs-profile-btn .user-sub-text {
+    font-size: 0.6875rem;
+    color: var(--col-text-muted);
+}
+
+.gs-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--col-accent), var(--col-accent-2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.875rem;
+    color: #fff;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.gs-avatar-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    display: none;
+}
+
+.gs-avatar-img.visible {
+    display: block;
+}
+
+/* Dropdown menu */
+.gs-dropdown {
+    position: absolute;
+    top: calc(var(--nav-h) + 8px);
+    right: 20px;
+    width: 240px;
+    background: var(--col-surface-2);
+    border: 1px solid var(--col-border);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+    z-index: 200;
+    transform-origin: top right;
+    transition: opacity var(--dur-med), transform var(--dur-med);
+}
+
+.gs-dropdown.hidden {
+    display: none;
+}
+
+.gs-dropdown.animating-out {
+    opacity: 0;
+    transform: scale(0.95) translateY(-4px);
+}
+
+.gs-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 16px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--col-text-muted);
+    cursor: pointer;
+    border-radius: 0;
+    transition: background var(--dur-fast), color var(--dur-fast);
+}
+
+.gs-dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--col-text);
+}
+
+.gs-dropdown-item svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+.gs-dropdown-divider {
+    height: 1px;
+    background: var(--col-border);
+    margin: 4px 0;
+}
+
+.gs-dropdown-item.danger {
+    color: var(--col-danger);
+}
+
+.gs-dropdown-item.danger:hover {
+    background: rgba(239, 68, 68, 0.08);
+}
+
+/* ============================================================
+   6. LAYOUT — sidebar + content
+   ============================================================ */
+.gs-layout {
+    padding-top: var(--nav-h);
+    display: flex;
+    min-height: 100vh;
+}
+
+/* SIDEBAR */
+.gs-sidebar {
+    position: fixed;
+    top: var(--nav-h);
+    left: 0;
+    bottom: 0;
+    width: var(--sidebar-w);
+    padding: 24px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: rgba(13, 17, 23, 0.7);
+    backdrop-filter: blur(12px);
+    border-right: 1px solid var(--col-border);
+    overflow-y: auto;
+    z-index: 50;
+}
+
+.gs-sidebar-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--col-text-dim);
+    padding: 8px 12px 4px;
+}
+
+.gs-nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--col-text-muted);
+    cursor: pointer;
+    transition: background var(--dur-fast), color var(--dur-fast), box-shadow var(--dur-med);
+    border: 1px solid transparent;
+    background: none;
+    width: 100%;
+    text-align: left;
+}
+
+.gs-nav-btn svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    transition: color var(--dur-fast);
+}
+
+.gs-nav-btn:hover {
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--col-text);
+}
+
+.gs-nav-btn.active {
+    background: rgba(99, 102, 241, 0.12);
+    border-color: rgba(99, 102, 241, 0.25);
+    color: var(--col-accent);
+    box-shadow: inset 0 0 20px rgba(99, 102, 241, 0.05);
+}
+
+.gs-nav-btn.active svg {
+    color: var(--col-accent);
+}
+
+.gs-nav-btn.danger {
+    color: var(--col-danger);
+}
+
+.gs-nav-btn.danger:hover {
+    background: rgba(239, 68, 68, 0.08);
+}
+
+/* MAIN CONTENT */
+.gs-main {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    padding: 28px 28px 60px;
+    min-height: calc(100vh - var(--nav-h));
+}
+
+/* CONTENT SECTIONS */
+.content-section {
+    display: none;
+    animation: fadeSlideUp var(--dur-med) ease both;
+}
+
+.content-section.active {
+    display: block;
+}
+
+@keyframes fadeSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================================
+   7. ANIMATED HERO MESH (Replaces Spline)
+   ============================================================ */
+.gs-spline-hero {
+    position: relative;
+    width: 100%;
+    height: 280px;
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    margin-bottom: 28px;
+    border: 1px solid var(--col-border);
+    background: var(--col-surface);
+}
+
+.gs-mesh-hero {
+    /* Beautiful deep dark CSS mesh */
+    background: radial-gradient(circle at 15% 50%, rgba(99, 102, 241, 0.15), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(6, 182, 212, 0.15), transparent 25%);
+    background-color: var(--col-surface-2);
+    position: relative;
+    overflow: hidden;
+}
+
+.gs-mesh-hero::before {
+    content: '';
+    position: absolute;
+    inset: -50%;
+    background:
+        conic-gradient(from 90deg at 50% 50%, #00000000 50%, var(--col-border-glow) 100%),
+        radial-gradient(circle at center, transparent 30%, var(--col-bg) 60%);
+    animation: rotateSlow 20s linear infinite;
+    opacity: 0.4;
+}
+
+.gs-mesh-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+}
+
+@keyframes rotateSlow {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Overlay text on top of Spline */
+.gs-hero-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 28px 32px;
+    background: linear-gradient(to top, rgba(7, 9, 15, 0.9) 0%, rgba(7, 9, 15, 0.3) 70%, transparent 100%);
+    pointer-events: none;
+}
+
+.gs-hero-overlay h1 {
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    background: linear-gradient(135deg, #fff 30%, var(--col-accent-3));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 4px;
+}
+
+.gs-hero-overlay p {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.55);
+}
+
+/* Spline loading skeleton */
+.gs-spline-loader {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--col-surface);
+    flex-direction: column;
+    gap: 12px;
+    z-index: 2;
+    transition: opacity var(--dur-slow);
+}
+
+.gs-spline-loader.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.gs-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid var(--col-border);
+    border-top-color: var(--col-accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ============================================================
+   8. STAT CARDS
+   ============================================================ */
+.gs-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+}
+
+.gs-stat-card {
+    position: relative;
+    overflow: hidden;
+    padding: 22px 24px;
+    background: var(--col-surface);
+    border: 1px solid var(--col-border);
+    border-radius: var(--radius-card);
+    transition: border-color var(--dur-med), transform var(--dur-med), box-shadow var(--dur-med);
+    cursor: default;
+}
+
+.gs-stat-card:hover {
+    transform: translateY(-2px);
+}
+
+/* Accent glow strip at top */
+.gs-stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    border-radius: 2px 2px 0 0;
+}
+
+.gs-stat-card.blue {
+    --card-glow: rgba(99, 102, 241, 0.15);
+}
+
+.gs-stat-card.blue::before {
+    background: linear-gradient(90deg, transparent, var(--col-accent), transparent);
+}
+
+.gs-stat-card.blue:hover {
+    border-color: rgba(99, 102, 241, 0.35);
+    box-shadow: 0 0 40px var(--card-glow);
+}
+
+.gs-stat-card.green {
+    --card-glow: rgba(16, 185, 129, 0.15);
+}
+
+.gs-stat-card.green::before {
+    background: linear-gradient(90deg, transparent, var(--col-success), transparent);
+}
+
+.gs-stat-card.green:hover {
+    border-color: rgba(16, 185, 129, 0.35);
+    box-shadow: 0 0 40px var(--card-glow);
+}
+
+.gs-stat-card.red {
+    --card-glow: rgba(239, 68, 68, 0.15);
+}
+
+.gs-stat-card.red::before {
+    background: linear-gradient(90deg, transparent, var(--col-danger), transparent);
+}
+
+.gs-stat-card.red:hover {
+    border-color: rgba(239, 68, 68, 0.35);
+    box-shadow: 0 0 40px var(--card-glow);
+}
+
+.gs-stat-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 14px;
+}
+
+.gs-stat-icon svg {
+    width: 22px;
+    height: 22px;
+}
+
+.gs-stat-card.blue .gs-stat-icon {
+    background: rgba(99, 102, 241, 0.12);
+    color: var(--col-accent);
+}
+
+.gs-stat-card.green .gs-stat-icon {
+    background: rgba(16, 185, 129, 0.12);
+    color: var(--col-success);
+}
+
+.gs-stat-card.red .gs-stat-icon {
+    background: rgba(239, 68, 68, 0.12);
+    color: var(--col-danger);
+}
+
+.gs-stat-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--col-text-muted);
+    letter-spacing: 0.03em;
+    margin-bottom: 6px;
+}
+
+.gs-stat-value {
+    font-size: 2rem;
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.04em;
+}
+
+.gs-stat-card.blue .gs-stat-value {
+    color: var(--col-accent);
+}
+
+.gs-stat-card.green .gs-stat-value {
+    color: var(--col-success);
+}
+
+.gs-stat-card.red .gs-stat-value {
+    color: var(--col-danger);
+}
+
+/* Number count-up animation class */
+@keyframes numberPop {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.stat-pop {
+    animation: numberPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* ============================================================
+   9. PANEL / CONTENT CARD
+   ============================================================ */
+.gs-panel {
+    background: var(--col-surface);
+    border: 1px solid var(--col-border);
+    border-radius: var(--radius-card);
+    padding: 24px;
+}
+
+.gs-panel-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--col-text);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.gs-panel-title .accent-bar {
+    width: 3px;
+    height: 18px;
+    border-radius: 2px;
+    background: linear-gradient(to bottom, var(--col-accent), var(--col-accent-2));
+}
+
+/* ============================================================
+   10. TABLE
+   ============================================================ */
+.gs-table-wrap {
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--col-border);
+}
+
+.gs-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.gs-table thead th {
+    background: rgba(255, 255, 255, 0.02);
+    padding: 12px 18px;
+    text-align: left;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--col-text-muted);
+    border-bottom: 1px solid var(--col-border);
+}
+
+.gs-table tbody td {
+    padding: 14px 18px;
+    font-size: 0.8125rem;
+    color: var(--col-text);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    vertical-align: middle;
+}
+
+.gs-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.gs-table tbody tr {
+    transition: background var(--dur-fast);
+}
+
+.gs-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* ============================================================
+   11. BADGES
+   ============================================================ */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: var(--radius-pill);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.badge-blue {
+    background: rgba(99, 102, 241, 0.12);
+    color: var(--col-accent);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.badge-green {
+    background: rgba(16, 185, 129, 0.12);
+    color: var(--col-success);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.badge-red {
+    background: rgba(239, 68, 68, 0.12);
+    color: var(--col-danger);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.badge-yellow {
+    background: rgba(245, 158, 11, 0.12);
+    color: var(--col-warning);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.badge-purple {
+    background: rgba(139, 92, 246, 0.12);
+    color: var(--col-accent-2);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+.badge-indigo {
+    background: rgba(99, 102, 241, 0.12);
+    color: #818cf8;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+/* ============================================================
+   12. SECTION HEADER (page title + subtitle)
+   ============================================================ */
+.gs-section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.gs-section-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.gs-section-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.gs-section-icon.blue {
+    background: rgba(99, 102, 241, 0.12);
+    color: var(--col-accent);
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
+}
+
+.gs-section-icon.purple {
+    background: rgba(139, 92, 246, 0.12);
+    color: var(--col-accent-2);
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.15);
+}
+
+.gs-section-icon.red {
+    background: rgba(239, 68, 68, 0.12);
+    color: var(--col-danger);
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.15);
+}
+
+.gs-section-title h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+}
+
+.gs-section-title p {
+    font-size: 0.875rem;
+    color: var(--col-text-muted);
+    margin-top: 2px;
+}
+
+/* ============================================================
+   13. FORM ELEMENTS
+   ============================================================ */
+.gs-input-wrap {
+    position: relative;
+    margin-bottom: 16px;
+}
+
+.gs-input-prefix {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--col-text-muted);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    pointer-events: none;
+}
+
+.gs-input {
+    width: 100%;
+    padding: 14px 16px;
+    background: var(--col-surface-2);
+    border: 1px solid var(--col-border);
+    border-radius: var(--radius-btn);
+    color: var(--col-text);
+    font-size: 0.9375rem;
+    font-family: 'Inter', sans-serif;
+    transition: border-color var(--dur-fast), box-shadow var(--dur-fast);
+    outline: none;
+}
+
+.gs-input.has-prefix {
+    padding-left: 48px;
+}
+
+.gs-input::placeholder {
+    color: var(--col-text-dim);
+}
+
+.gs-input:focus {
+    border-color: var(--col-accent);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.gs-label {
+    display: block;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--col-text-muted);
+    margin-bottom: 6px;
+}
+
+.gs-select {
+    width: 100%;
+    padding: 14px 16px;
+    background: var(--col-surface-2);
+    border: 1px solid var(--col-border);
+    border-radius: var(--radius-btn);
+    color: var(--col-text);
+    font-size: 0.875rem;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    cursor: pointer;
+    transition: border-color var(--dur-fast), box-shadow var(--dur-fast);
+    appearance: none;
+}
+
+.gs-select:focus {
+    border-color: var(--col-accent);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.gs-textarea {
+    width: 100%;
+    padding: 14px 16px;
+    background: var(--col-surface-2);
+    border: 1px solid var(--col-border);
+    border-radius: var(--radius-btn);
+    color: var(--col-text);
+    font-size: 0.875rem;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    resize: vertical;
+    min-height: 100px;
+    transition: border-color var(--dur-fast), box-shadow var(--dur-fast);
+}
+
+.gs-textarea:focus {
+    border-color: var(--col-accent);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+/* Radio type selector */
+.gs-radio-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.gs-radio-label {
+    cursor: pointer;
+}
+
+.gs-radio-label input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.gs-radio-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px;
+    border-radius: var(--radius-btn);
+    border: 1px solid var(--col-border);
+    background: var(--col-surface-2);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--col-text-muted);
+    transition: all var(--dur-fast);
+}
+
+.gs-radio-label input:checked+.gs-radio-box {
+    border-color: var(--col-accent);
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--col-accent);
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.12);
+}
+
+.gs-radio-box svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Dropzone */
+.gs-dropzone {
+    position: relative;
+    border: 2px dashed var(--col-border);
+    border-radius: var(--radius-card);
+    padding: 48px 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color var(--dur-fast), background var(--dur-fast);
+    margin-bottom: 16px;
+}
+
+.gs-dropzone input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+}
+
+.gs-dropzone:hover {
+    border-color: var(--col-accent);
+    background: rgba(99, 102, 241, 0.03);
+}
+
+.gs-dropzone.dragging {
+    border-color: var(--col-accent);
+    background: rgba(99, 102, 241, 0.06);
+}
+
+.gs-dropzone-icon {
+    width: 52px;
+    height: 52px;
+    color: var(--col-text-dim);
+    margin: 0 auto 14px;
+}
+
+.gs-dropzone-title {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--col-text);
+    margin-bottom: 4px;
+}
+
+.gs-dropzone-sub {
+    font-size: 0.8125rem;
+    color: var(--col-text-muted);
+}
+
+.gs-file-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 14px;
+    padding: 5px 14px;
+    background: rgba(99, 102, 241, 0.12);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: var(--radius-pill);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--col-accent);
+}
+
+/* ============================================================
+   14. BUTTONS
+   ============================================================ */
+.gs-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 24px;
+    border-radius: var(--radius-btn);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all var(--dur-fast);
+    letter-spacing: -0.01em;
+    width: 100%;
+}
+
+.gs-btn svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.gs-btn-primary {
+    background: linear-gradient(135deg, var(--col-accent), var(--col-accent-2));
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+}
+
+.gs-btn-primary:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
+}
+
+.gs-btn-primary:active {
+    transform: translateY(0);
+}
+
+.gs-btn-primary:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.gs-btn-danger {
+    background: linear-gradient(135deg, var(--col-danger), #b91c1c);
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(239, 68, 68, 0.3);
+}
+
+.gs-btn-danger:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 30px rgba(239, 68, 68, 0.4);
+}
+
+.gs-btn-danger:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+/* Spinner inside button */
+.btn-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    display: none;
+}
+
+.btn-spinner.show {
+    display: inline-block;
+}
+
+/* ============================================================
+   15. RESULT CARDS
+   ============================================================ */
+.gs-result {
+    border-radius: var(--radius-card);
+    padding: 20px 22px;
+    border: 1px solid;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    animation: fadeSlideUp var(--dur-med) ease both;
+}
+
+.gs-result.safe {
+    background: rgba(16, 185, 129, 0.06);
+    border-color: rgba(16, 185, 129, 0.25);
+}
+
+.gs-result.danger {
+    background: rgba(239, 68, 68, 0.06);
+    border-color: rgba(239, 68, 68, 0.25);
+}
+
+.gs-result.warning {
+    background: rgba(245, 158, 11, 0.06);
+    border-color: rgba(245, 158, 11, 0.25);
+}
+
+.gs-result-icon {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+}
+
+.gs-result-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.gs-result h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.gs-result.safe h4 {
+    color: var(--col-success);
+}
+
+.gs-result.danger h4 {
+    color: var(--col-danger);
+}
+
+.gs-result.warning h4 {
+    color: var(--col-warning);
+}
+
+.gs-result p {
+    font-size: 0.875rem;
+    color: var(--col-text-muted);
+    margin-bottom: 12px;
+}
+
+.gs-result-meta {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--col-border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.8125rem;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.gs-result-meta .meta-row {
+    display: flex;
+    gap: 6px;
+}
+
+.gs-result-meta .meta-key {
+    color: var(--col-text-muted);
+    flex-shrink: 0;
+}
+
+.gs-result-meta .meta-val {
+    color: var(--col-text);
+    font-weight: 600;
+}
+
+/* Progress bar */
+.gs-progress-wrap {
+    margin-top: 12px;
+}
+
+.gs-progress-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.gs-progress-bar-bg {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 99px;
+    height: 6px;
+    overflow: hidden;
+    border: 1px solid var(--col-border);
+}
+
+.gs-progress-bar-fill {
+    height: 100%;
+    border-radius: 99px;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fill-green {
+    background: linear-gradient(90deg, var(--col-success), #34d399);
+    box-shadow: 0 0 8px var(--col-success);
+}
+
+.fill-red {
+    background: linear-gradient(90deg, var(--col-danger), #f87171);
+    box-shadow: 0 0 8px var(--col-danger);
+}
+
+/* ============================================================
+   16. INFO BOX
+   ============================================================ */
+.gs-info-box {
+    display: flex;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    background: rgba(99, 102, 241, 0.07);
+    border: 1px solid rgba(99, 102, 241, 0.15);
+    color: rgba(165, 180, 252, 0.9);
+    font-size: 0.8125rem;
+    line-height: 1.6;
+}
+
+.gs-info-box svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    color: var(--col-accent);
+}
+
+/* ============================================================
+   17. FEEDBACK MESSAGE
+   ============================================================ */
+.gs-feedback {
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 16px;
+    text-align: center;
+    display: none;
+}
+
+.gs-feedback.success {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    color: var(--col-success);
+    display: block;
+}
+
+.gs-feedback.error {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    color: var(--col-danger);
+    display: block;
+}
+
+/* ============================================================
+   18. RESPONSIVE
+   ============================================================ */
+@media (max-width: 1024px) {
+    .gs-sidebar {
+        display: none;
+    }
+
+    .gs-main {
+        margin-left: 0;
+        padding: 20px 16px 40px;
+    }
+
+    .gs-mobile-nav {
+        display: flex !important;
+        gap: 8px;
+        overflow-x: auto;
+        padding: 0 0 16px;
+        margin-bottom: 8px;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    .gs-mobile-nav::-webkit-scrollbar {
+        display: none;
+    }
+
+    .gs-mobile-nav .gs-nav-btn {
+        white-space: nowrap;
+        flex-shrink: 0;
+        padding: 8px 14px;
+        border: 1px solid var(--col-border);
+        background: var(--col-surface);
+    }
+
+    .gs-stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .gs-hero-overlay h1 {
+        font-size: 1.25rem;
+    }
+}
+
+@media (min-width: 1025px) {
+    .gs-mobile-nav {
+        display: none;
+    }
+}
+
+@media (max-width: 640px) {
+    .gs-spline-hero {
+        height: 200px;
+    }
+}
+
+/* ============================================================
+   LIGHT MODE — [data-theme="light"] on <html>
+   Palette: crisp white + soft olive / sage green
+   ============================================================ */
+
+[data-theme="light"] {
+    /* Surfaces */
+    --col-bg: #f5f7f5;
+    /* very soft sage-white page bg */
+    --col-surface: #ffffff;
+    /* card white */
+    --col-surface-2: #eef3ee;
+    /* elevated / input bg, light sage tint */
+    --col-border: rgba(74, 108, 74, 0.12);
+    --col-border-glow: rgba(74, 108, 74, 0.3);
+
+    /* Accent — olive / sage green */
+    --col-accent: #4a7c59;
+    /* sage green primary */
+    --col-accent-2: #3a6347;
+    /* deep olive green */
+    --col-accent-3: #5a9e6a;
+    /* lighter leaf green */
+    --col-danger: #c0392b;
+    --col-warning: #d97706;
+    --col-success: #2f7d4f;
+
+    /* Text */
+    --col-text: #1a2e1f;
+    /* dark forest green-black */
+    --col-text-muted: #5a7a5a;
+    /* muted olive */
+    --col-text-dim: #9db89d;
+    /* very muted */
+
+    /* Glows — softer for light mode */
+    --glow-accent: 0 0 20px rgba(74, 108, 74, 0.18);
+    --glow-danger: 0 0 14px rgba(192, 57, 43, 0.18);
+    --glow-success: 0 0 14px rgba(47, 125, 79, 0.18);
+    --glow-card: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Light mode — background orbs */
+[data-theme="light"] body::before {
+    background:
+        radial-gradient(ellipse 80% 50% at 20% 10%, rgba(74, 108, 74, 0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(90, 158, 106, 0.07) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 30% at 60% 20%, rgba(58, 99, 71, 0.05) 0%, transparent 50%);
+}
+
+/* Light mode — subtle grid becomes barely visible */
+[data-theme="light"] body::after {
+    background-image:
+        linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+}
+
+/* Light mode — navbar */
+[data-theme="light"] .gs-nav {
+    background: rgba(245, 247, 245, 0.88);
+    border-bottom: 1px solid rgba(74, 108, 74, 0.12);
+}
+
+/* Light mode — sidebar */
+[data-theme="light"] .gs-sidebar {
+    background: rgba(245, 247, 245, 0.9);
+    border-right: 1px solid rgba(74, 108, 74, 0.12);
+}
+
+/* Light mode — profile btn */
+[data-theme="light"] .gs-profile-btn {
+    background: #ffffff;
+    border-color: rgba(74, 108, 74, 0.18);
+}
+
+[data-theme="light"] .gs-profile-btn:hover {
+    border-color: var(--col-accent);
+    box-shadow: 0 0 12px rgba(74, 108, 74, 0.15);
+}
+
+/* Light mode — dropdown */
+[data-theme="light"] .gs-dropdown {
+    background: #ffffff;
+    border-color: rgba(74, 108, 74, 0.12);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12);
+}
+
+[data-theme="light"] .gs-dropdown-item:hover {
+    background: rgba(74, 108, 74, 0.06);
+}
+
+/* Light mode — stat card glow strips */
+[data-theme="light"] .gs-stat-card.blue:hover {
+    border-color: rgba(74, 108, 74, 0.4);
+    box-shadow: 0 0 30px rgba(74, 108, 74, 0.12);
+}
+
+[data-theme="light"] .gs-stat-card.green:hover {
+    border-color: rgba(47, 125, 79, 0.4);
+    box-shadow: 0 0 30px rgba(47, 125, 79, 0.12);
+}
+
+[data-theme="light"] .gs-stat-card.red:hover {
+    border-color: rgba(192, 57, 43, 0.4);
+    box-shadow: 0 0 30px rgba(192, 57, 43, 0.12);
+}
+
+/* Light mode nav btn active */
+[data-theme="light"] .gs-nav-btn.active {
+    background: rgba(74, 108, 74, 0.1);
+    border-color: rgba(74, 108, 74, 0.22);
+    color: var(--col-accent);
+}
+
+/* Light mode — table */
+[data-theme="light"] .gs-table thead th {
+    background: rgba(74, 108, 74, 0.04);
+}
+
+[data-theme="light"] .gs-table tbody tr:hover {
+    background: rgba(74, 108, 74, 0.04);
+}
+
+/* Light mode — progress bar */
+[data-theme="light"] .fill-green {
+    box-shadow: 0 0 6px rgba(47, 125, 79, 0.4);
+}
+
+[data-theme="light"] .fill-red {
+    box-shadow: 0 0 6px rgba(192, 57, 43, 0.4);
+}
+
+/* Light mode — info box */
+[data-theme="light"] .gs-info-box {
+    background: rgba(74, 108, 74, 0.06);
+    border-color: rgba(74, 108, 74, 0.18);
+    color: var(--col-accent-2);
+}
+
+/* Light mode nav pill */
+[data-theme="light"] .gs-nav-pill {
+    background: rgba(47, 125, 79, 0.08);
+    border-color: rgba(47, 125, 79, 0.18);
+    color: var(--col-success);
+}
+
+/* ============================================================
+   THEME TOGGLE — vanilla JS port of the React ThemeToggle
+   Mirrors the exact animation: sliding circle, Moon/Sun swap
+   ============================================================ */
+
+.theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 64px;
+    height: 32px;
+    padding: 4px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background var(--dur-med), border-color var(--dur-med);
+    border: 1px solid;
+    flex-shrink: 0;
+    margin-left: 12px;
+    position: relative;
+    /* dark default */
+    background: #09090b;
+    /* zinc-950 */
+    border-color: #27272a;
+    /* zinc-800 */
+}
+
+/* Light theme variant of the track */
+[data-theme="light"] .theme-toggle {
+    background: #ffffff;
+    border-color: #e4e4e7;
+    /* zinc-200 */
+}
+
+/* The sliding knob */
+.theme-toggle-knob {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform var(--dur-med) cubic-bezier(0.4, 0, 0.2, 1), background var(--dur-med);
+    flex-shrink: 0;
+    /* dark: knob on LEFT, zinc-800 bg */
+    transform: translateX(0);
+    background: #3f3f46;
+    /* zinc-700 */
+}
+
+[data-theme="light"] .theme-toggle-knob {
+    /* light: knob slides to RIGHT */
+    transform: translateX(32px);
+    background: #e4e4e7;
+    /* gray-200 */
+}
+
+/* Icons inside knob */
+.toggle-icon-moon,
+.toggle-icon-sun-passive {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    transition: opacity var(--dur-fast);
+}
+
+/* In dark mode: moon icon visible on LEFT knob */
+.theme-toggle .toggle-icon-moon {
+    opacity: 1;
+}
+
+.theme-toggle .toggle-icon-sun-passive {
+    opacity: 1;
+    right: 8px;
+}
+
+/* SVG icon colours */
+.theme-toggle svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Dark mode icons */
+.theme-toggle .icon-moon {
+    color: #ffffff;
+}
+
+.theme-toggle .icon-sun-gray {
+    color: #71717a;
+}
+
+/* zinc-500 */
+/* Light mode icons */
+[data-theme="light"] .theme-toggle .icon-moon {
+    color: #18181b;
+}
+
+[data-theme="light"] .theme-toggle .icon-sun-gray {
+    color: #52525b;
+}
+
+/* The passive icon (opposite side, not on knob) */
+.theme-toggle-passive {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: opacity var(--dur-fast);
+}

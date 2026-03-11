@@ -1,0 +1,64 @@
+# ╔══════════════════════════════════════════════════════════════════════════╗
+# ║              GuardianShield — Netlify Deployment Config                 ║
+# ╚══════════════════════════════════════════════════════════════════════════╝
+
+[build]
+  # Static frontend lives in /public
+  publish = "public"
+  # Serverless functions live in /netlify/functions
+  functions = "netlify/functions"
+  # Install deps for the root (functions use root node_modules)
+  command = "npm install"
+
+[build.environment]
+  NODE_VERSION = "18"
+  NODE_ENV     = "production"
+
+# ── API: route all /api/* to the single serverless function ─────────────────
+[[redirects]]
+  from   = "/api/*"
+  to     = "/.netlify/functions/api/:splat"
+  status = 200
+
+# ── SPA fallback: unknown paths → index.html (404 catches them) ─────────────
+[[redirects]]
+  from   = "/home.html"
+  to     = "/home.html"
+  status = 200
+
+[[redirects]]
+  from   = "/login.html"
+  to     = "/login.html"
+  status = 200
+
+[[redirects]]
+  from   = "/signup.html"
+  to     = "/signup.html"
+  status = 200
+
+[[redirects]]
+  from   = "/profile.html"
+  to     = "/profile.html"
+  status = 200
+
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 404
+
+# ── Function config ─────────────────────────────────────────────────────────
+[functions]
+  # Give the function more memory & time for AI inference calls
+  node_bundler        = "esbuild"
+
+[functions."api"]
+  timeout    = 26   # seconds (Netlify max on Pro is 26s)
+
+# ── Production environment variables ────────────────────────────────────────
+# Add your actual secrets in Netlify Dashboard → Site → Environment Variables
+# These are just the keys; values must be set in the Netlify UI (never commit secrets!)
+# Required keys:
+#   JWT_SECRET
+#   INSFORGE_SERVICE_ROLE_KEY
+#   INSFORGE_ANON_KEY
+#   HUGGINGFACE_API_KEY  (if used)

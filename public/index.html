@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GuardianShield - AI-Powered Citizen Protection</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/magic-bento.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <!-- TargetCursor styles (from ui.md) -->
+    <style>
+        /* Hide default cursor on desktop */
+        @media (pointer: fine) {
+            body, a, button, [role="button"] { cursor: none !important; }
+        }
+
+        .target-cursor-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            pointer-events: none;
+            z-index: 99999;
+            mix-blend-mode: difference;
+        }
+        .target-cursor-dot {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 6px;
+            height: 6px;
+            background: #fff;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            will-change: transform;
+        }
+        .target-cursor-corner {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            border: 2.5px solid #fff;
+            will-change: transform;
+            transform: translate(-50%, -50%);
+        }
+        .corner-tl { border-right: none; border-bottom: none; }
+        .corner-tr { border-left:  none; border-bottom: none; }
+        .corner-br { border-left:  none; border-top:    none; }
+        .corner-bl { border-right: none; border-top:    none; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: '#050511', // Deep dark backdrop for Spline
+                        accent: '#8B5CF6', // Purple/Vibrant accent
+                        redAlert: '#EF4444',
+                    },
+                    keyframes: {
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-50%)' },
+                        },
+                        fadeUp: {
+                            '0%': { opacity: 0, transform: 'translateY(30px)' },
+                            '100%': { opacity: 1, transform: 'translateY(0)' }
+                        }
+                    },
+                    animation: {
+                        'fade-up': 'fadeUp 1s cubic-bezier(0.25, 0.4, 0.25, 1) forwards'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-navy text-gray-100 min-h-screen selection:bg-accent selection:text-white">
+
+    <!-- TargetCursor DOM -->
+    <div id="target-cursor" class="target-cursor-wrapper" aria-hidden="true">
+        <div class="target-cursor-dot" id="cursor-dot"></div>
+        <div class="target-cursor-corner corner-tl"></div>
+        <div class="target-cursor-corner corner-tr"></div>
+        <div class="target-cursor-corner corner-br"></div>
+        <div class="target-cursor-corner corner-bl"></div>
+    </div>
+
+    <!-- RIPPLE GRID BACKGROUND (Moved to text section) -->
+
+    <!-- MAIN U.I OVERLAY -->
+    <!-- pointer-events-none lets the clicks pass through the transparent sections to the canvas underneath -->
+    <div class="relative z-10 pointer-events-none">
+
+        <!-- NAVBAR: We restore pointer-events-auto so buttons stay clickable -->
+        <nav id="navbar"
+            class="fixed w-full z-50 transition-all duration-300 py-4 px-6 md:px-12 flex justify-between items-center text-white bg-navy/20 backdrop-blur-md border-b border-white/10 pointer-events-auto">
+            <div class="flex items-center gap-2">
+                <svg class="w-8 h-8 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+                <span class="font-bold text-xl tracking-tight">GuardianShield</span>
+            </div>
+            <div class="hidden md:flex items-center gap-8 font-medium">
+                <a href="#features" class="cursor-target hover:text-accent transition drop-shadow-md">Features</a>
+                <a href="#how-it-works" class="cursor-target hover:text-accent transition drop-shadow-md">How It Works</a>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="login.html"
+                    class="cursor-target hidden sm:block px-4 py-2 rounded-full border border-white/30 hover:bg-white/10 transition drop-shadow-md">Log
+                    In</a>
+                <a href="signup.html"
+                    class="cursor-target px-5 py-2 rounded-full bg-accent hover:bg-purple-600 transition font-bold shadow-[0_0_15px_rgba(139,92,246,0.5)]">Free
+                    Protection</a>
+            </div>
+        </nav>
+
+        <!-- HERO SECTION -->
+        <header class="relative pt-32 pb-20 lg:pt-40 lg:pb-32 overflow-hidden min-h-screen flex items-center">
+            <!-- FAULTY TERMINAL WebGL background -->
+            <canvas id="faulty-canvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;mix-blend-mode:screen;"></canvas>
+
+
+            <div
+                class="container mx-auto px-6 relative z-10 grid lg:grid-cols-2 gap-12 items-center pointer-events-none">
+                <!-- pointer-events-auto Restored for the Text Column, so buttons inside are clickable -->
+                <div
+                    class="max-w-2xl bg-transparent p-8 lg:p-10 pointer-events-auto">
+
+                    <div
+                        class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-8 text-sm font-medium">
+                        <span
+                            class="w-2.5 h-2.5 rounded-full bg-redAlert animate-[pulse_1.5s_ease-in-out_infinite] shadow-[0_0_8px_rgba(239,68,68,0.8)]"></span>
+                        Defending India from Deepfake Fraud
+                    </div>
+                    <h1 class="text-4xl sm:text-6xl md:text-[5.5rem] font-bold mb-6 md:mb-8 tracking-tight leading-[1.1] drop-shadow-lg opacity-0 animate-[fadeUp_1s_cubic-bezier(0.25,0.4,0.25,1)_forwards]" style="animation-delay: 0.7s;">
+                        <span class="bg-clip-text text-transparent bg-gradient-to-b from-white to-white/80">
+                            Is That Call Really
+                        </span>
+                        <br>
+                        <span class="bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-white/90 to-rose-300 drop-shadow-sm">
+                            From Your Bank?
+                        </span>
+                    </h1>
+                    <p class="text-lg lg:text-xl text-white/40 mb-10 leading-relaxed font-light tracking-wide max-w-xl drop-shadow-md">
+                        GuardianShield detects AI-cloned voices and deepfake videos in real time — protecting you from
+                        financial scams before they happen.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="signup.html"
+                            class="cursor-target px-8 py-4 rounded-full bg-accent hover:bg-purple-600 transition font-bold text-center shadow-[0_0_20px_rgba(139,92,246,0.6)] text-lg hover:-translate-y-1 transform duration-200 text-white border border-accent/50">Get
+                            Protected Free</a>
+                        <a href="#how-it-works"
+                            class="cursor-target px-8 py-4 rounded-full border border-white/20 hover:bg-white/10 transition text-center text-lg font-medium text-white hover:-translate-y-1 transform duration-200">See
+                            How It Works</a>
+                    </div>
+                </div>
+
+                <!-- Right column placeholder -->
+            </div>
+        </header>
+
+        <!-- TICKER -->
+        <div
+            class="bg-navy/60 backdrop-blur-md text-white py-4 overflow-hidden whitespace-nowrap border-b border-t border-purple-500/30 pointer-events-auto">
+            <div
+                class="animate-[marquee_20s_linear_infinite] inline-block font-semibold text-lg hover:pause-animation drop-shadow-md">
+                <span class="mx-12">🔴 3,241 scam calls detected today</span>
+                <span class="mx-12">🛡️ Rs. 15.2 Cr in fraud prevented this month</span>
+                <span class="mx-12">👁️ 847 deepfake videos flagged</span>
+                <span class="mx-12">📲 Over 1M citizens protected</span>
+                <!-- duplicate for smooth scrolling -->
+                <span class="mx-12">🔴 3,241 scam calls detected today</span>
+                <span class="mx-12">🛡️ Rs. 15.2 Cr in fraud prevented this month</span>
+                <span class="mx-12">👁️ 847 deepfake videos flagged</span>
+                <span class="mx-12">📲 Over 1M citizens protected</span>
+            </div>
+        </div>
+
+        <!-- Scrollable Solid Sections that cover the background as you scroll down -->
+        <!-- We use pointer-events-auto and a dark glassy look so it contrasts with Spline underneath -->
+        <section id="features"
+            class="py-24 bg-navy/80 backdrop-blur-3xl pointer-events-auto border-b border-white/5 relative shadow-[0_-20px_50px_rgba(0,0,0,0.5)]">
+            <div class="container mx-auto px-6">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-4xl font-bold mb-6 text-white drop-shadow-sm">Everything You Need to Stay Safe</h2>
+                    <p class="text-xl text-gray-400">Our real-time AI analyzes your communications instantly.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 bento-section">
+                    <!-- Glass Card 1 -->
+                    <div class="magic-bento-card magic-bento-card--border-glow particle-container group list-none cursor-pointer" onclick="window.location.href = localStorage.getItem('gs_token') ? 'home.html#num-scan' : 'login.html'">
+                        <div class="relative z-10 flex h-full flex-col justify-between">
+                            <div>
+                                <div class="w-14 h-14 bg-accent/20 text-accent rounded-2xl flex items-center justify-center mb-6 border border-accent/20 group-hover:scale-110 shadow-[0_0_15px_rgba(139,92,246,0.3)] transition shrink-0">
+                                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-2xl font-bold mb-3 text-white">Phone Risk Analysis</h3>
+                                <p class="text-gray-400 leading-relaxed font-light">Instantly checks any number against fraud databases, exposing high-risk activities before you answer.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Glass Card 2 -->
+                    <div class="magic-bento-card magic-bento-card--border-glow particle-container group list-none cursor-pointer" onclick="window.location.href = localStorage.getItem('gs_token') ? 'home.html#media-scan' : 'login.html'">
+                        <div class="relative z-10 flex h-full flex-col justify-between">
+                            <div>
+                                <div class="w-14 h-14 bg-red-500/20 text-red-400 rounded-2xl flex items-center justify-center mb-6 border border-red-500/20 group-hover:scale-110 shadow-[0_0_15px_rgba(239,68,68,0.3)] transition shrink-0">
+                                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-2xl font-bold mb-3 text-white">Deepfake Detection</h3>
+                                <p class="text-gray-400 leading-relaxed font-light">Upload a suspicious video message — our AI scans facial geometry and artifacts in under 30 seconds.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Glass Card 3 -->
+                    <div class="magic-bento-card magic-bento-card--border-glow particle-container group list-none cursor-pointer" onclick="window.location.href = localStorage.getItem('gs_token') ? 'home.html#media-scan' : 'login.html'">
+                        <div class="relative z-10 flex h-full flex-col justify-between">
+                            <div>
+                                <div class="w-14 h-14 bg-pink-500/20 text-pink-400 rounded-2xl flex items-center justify-center mb-6 border border-pink-500/20 group-hover:scale-110 shadow-[0_0_15px_rgba(236,72,153,0.3)] transition shrink-0">
+                                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-2xl font-bold mb-3 text-white">Voice Clone Scanner</h3>
+                                <p class="text-gray-400 leading-relaxed font-light">Detects AI-synthesized voices with 92% accuracy. Don't transfer money based on voice alone.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Glassy Information section -->
+        <section id="how-it-works"
+            class="py-24 bg-navy/90 backdrop-blur-xl pointer-events-auto border-b border-white/5 relative z-20">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center text-white drop-shadow-sm">What Do The
+                    Colors Mean?</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 bento-section">
+                    <!-- Red Indicator -->
+                    <div
+                        class="magic-bento-card magic-bento-card--border-glow particle-container group list-none cursor-pointer p-8 !rounded-3xl border !border-red-500/30 !bg-red-900/10 shadow-lg flex flex-col items-center text-center" style="--glow-rgb: 239, 68, 68;">
+                        <div
+                            class="relative z-10 w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(239,68,68,0.5)] text-white ring-4 ring-red-500/20 group-hover:scale-110 transition duration-300">
+                            <svg class="w-8 h-8 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+                                </path>
+                            </svg>
+                        </div>
+                        <h4 class="relative z-10 font-bold text-xl text-red-400 mb-3 drop-shadow-sm">High Risk</h4>
+                        <p class="relative z-10 text-red-200/80 font-medium">AI-Generated.<br>Do Not Engage.<br>Report Now.</p>
+                    </div>
+                    <!-- Amber Indicator -->
+                    <div
+                        class="magic-bento-card magic-bento-card--border-glow particle-container group list-none cursor-pointer p-8 !rounded-3xl border !border-amber-500/30 !bg-amber-900/10 shadow-lg flex flex-col items-center text-center" style="--glow-rgb: 245, 158, 11;">
+                        <div
+                            class="relative z-10 w-16 h-16 bg-amber-500 rounded-full flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(245,158,11,0.5)] text-white ring-4 ring-amber-500/20 group-hover:scale-110 transition duration-300">
+                            <svg class="w-8 h-8 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h4 class="relative z-10 font-bold text-xl text-amber-400 mb-3 drop-shadow-sm">Suspicious</h4>
+                        <p class="relative z-10 text-amber-200/80 font-medium">Reported heavily.<br>Verify via Another Channel.</p>
+                    </div>
+                    <!-- Accent (Purple) Indicator -->
+                    <div
+                        class="magic-bento-card magic-bento-card--border-glow particle-container group list-none cursor-pointer p-8 !rounded-3xl border !border-accent/30 !bg-accent/10 shadow-lg flex flex-col items-center text-center" style="--glow-rgb: 139, 92, 246;">
+                        <div
+                            class="relative z-10 w-16 h-16 bg-accent rounded-full flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(139,92,246,0.6)] text-white ring-4 ring-accent/20 group-hover:scale-110 transition duration-300">
+                            <svg class="w-8 h-8 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
+                                </path>
+                            </svg>
+                        </div>
+                        <h4 class="relative z-10 font-bold text-xl text-purple-400 mb-3 drop-shadow-sm">Trusted</h4>
+                        <p class="relative z-10 text-purple-200/80 font-medium">Verified Source.<br>Safe to Proceed.</p>
+                    </div>
+                    <!-- Gray Indicator -->
+                    <div
+                        class="magic-bento-card magic-bento-card--border-glow particle-container group list-none cursor-pointer p-8 !rounded-3xl border !border-gray-600/30 !bg-gray-600/10 shadow-lg flex flex-col items-center text-center" style="--glow-rgb: 156, 163, 175;">
+                        <div
+                            class="relative z-10 w-16 h-16 border-4 border-gray-500 rounded-full flex items-center justify-center mb-6 text-gray-300 ring-4 ring-white/5 bg-navy group-hover:scale-110 transition duration-300">
+                            <svg class="w-8 h-8 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                                </path>
+                            </svg>
+                        </div>
+                        <h4 class="relative z-10 font-bold text-xl text-gray-300 mb-3 drop-shadow-sm">Unclassified</h4>
+                        <p class="relative z-10 text-gray-400 font-medium">New Number.<br>No Data Available.<br>Stay Alert.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer
+            class="bg-[#030308] text-gray-300 text-opacity-80 pt-20 pb-10 border-t border-white/5 pointer-events-auto relative z-20">
+            <div class="container mx-auto px-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+                    <div class="col-span-1 md:col-span-2 text-left">
+                        <div class="flex items-center gap-2 mb-6">
+                            <svg class="w-8 h-8 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            </svg>
+                            <span
+                                class="font-bold text-2xl tracking-tight text-white drop-shadow-sm">GuardianShield</span>
+                        </div>
+                        <p class="max-w-md mb-6 leading-relaxed bg-clip-text text-gray-400">Bringing enterprise-grade AI
+                            fraud detection to every Indian citizen. Defend your identity today.</p>
+                        <a href="signup.html"
+                            class="inline-block px-6 py-3 rounded-full border border-accent/70 hover:bg-accent/20 transition font-bold text-accent shadow-[0_0_15px_rgba(139,92,246,0.3)]">Sign
+                            Up for Free</a>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-white mb-6 uppercase tracking-wider text-sm drop-shadow-sm">Product
+                        </h4>
+                        <ul class="space-y-4">
+                            <li><a href="home.html#media-scan" class="hover:text-accent transition">Voice Scanner</a></li>
+                            <li><a href="home.html#media-scan" class="hover:text-accent transition">Video Analysis</a></li>
+                            <li><a href="home.html#num-scan" class="hover:text-accent transition">Phone Risk</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-white mb-6 uppercase tracking-wider text-sm drop-shadow-sm">Legal</h4>
+                        <ul class="space-y-4">
+                            <li><a href="#" class="hover:text-accent transition">Privacy Policy</a></li>
+                            <li><a href="#" class="hover:text-accent transition">Terms of Service</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div
+                    class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-sm">
+                    <p>&copy; 2026 GuardianShield. Team Error 404!!. All rights reserved.</p>
+                    <div class="mt-4 md:mt-0 flex items-center gap-2 font-medium">
+                        Made with <span class="text-redAlert drop-shadow-sm">♥</span> in India
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+
+    <!-- ANIMATED MENU BAR (TOP) -->
+    <div id="animated-menu-bar" class="fixed top-20 w-full flex justify-center z-[99] pointer-events-auto px-4 sm:px-0 transition-all duration-500">
+        <nav class="flex items-center gap-1.5 bg-white/10 backdrop-blur-xl p-2 rounded-2xl border border-white/20 shadow-2xl transition-all duration-300">
+
+            <!-- Dashboard -->
+            <button id="mbtn-dashboard"
+                onclick="window.location.href = localStorage.getItem('gs_token') ? 'home.html' : 'login.html'"
+                class="menu-bar-btn group relative flex items-center rounded-xl border border-white/30 bg-white/15 text-white font-semibold transition-all duration-300 overflow-hidden"
+                aria-label="Dashboard">
+                <span class="flex items-center justify-center w-11 h-11 shrink-0">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 9.5L12 4l9 5.5v7.5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9.5z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 22V12h6v10" />
+                    </svg>
+                </span>
+                <span class="menu-bar-label text-sm font-medium pr-4 whitespace-nowrap max-w-0 overflow-hidden opacity-0 transition-all duration-300">Dashboard</span>
+                <span class="absolute -bottom-7 left-1/2 -translate-x-1/2 bg-white text-navy text-xs rounded-lg px-2 py-1 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none sm:hidden z-20 whitespace-nowrap">Dashboard</span>
+            </button>
+
+            <!-- Divider -->
+            <div class="w-px h-6 bg-white/20 mx-0.5"></div>
+
+            <!-- Phone Scan -->
+            <button id="mbtn-phone"
+                onclick="window.location.href = localStorage.getItem('gs_token') ? 'home.html#num-scan' : 'login.html'"
+                class="menu-bar-btn group relative flex items-center rounded-xl border border-transparent text-white/60 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all duration-300 overflow-hidden"
+                aria-label="Phone Scan">
+                <span class="flex items-center justify-center w-11 h-11 shrink-0">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    </svg>
+                </span>
+                <span class="menu-bar-label text-sm font-medium pr-4 whitespace-nowrap max-w-0 overflow-hidden opacity-0 transition-all duration-300">Phone Scan</span>
+                <span class="absolute -bottom-7 left-1/2 -translate-x-1/2 bg-white text-navy text-xs rounded-lg px-2 py-1 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none sm:hidden z-20 whitespace-nowrap">Scan</span>
+            </button>
+
+            <!-- AI Video -->
+            <button id="mbtn-video"
+                onclick="window.location.href = localStorage.getItem('gs_token') ? 'home.html#media-scan' : 'login.html'"
+                class="menu-bar-btn group relative flex items-center rounded-xl border border-transparent text-white/60 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all duration-300 overflow-hidden"
+                aria-label="AI Video">
+                <span class="flex items-center justify-center w-11 h-11 shrink-0">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                </span>
+                <span class="menu-bar-label text-sm font-medium pr-4 whitespace-nowrap max-w-0 overflow-hidden opacity-0 transition-all duration-300">AI Video</span>
+                <span class="absolute -bottom-7 left-1/2 -translate-x-1/2 bg-white text-navy text-xs rounded-lg px-2 py-1 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none sm:hidden z-20 whitespace-nowrap">AI Scan</span>
+            </button>
+
+            <!-- Report Scam -->
+            <button id="mbtn-report"
+                onclick="window.location.href = localStorage.getItem('gs_token') ? 'home.html#report-fraud' : 'login.html'"
+                class="menu-bar-btn group relative flex items-center rounded-xl border border-transparent text-white/60 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all duration-300 overflow-hidden"
+                aria-label="Report Scam">
+                <span class="flex items-center justify-center w-11 h-11 shrink-0">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </span>
+                <span class="menu-bar-label text-sm font-medium pr-4 whitespace-nowrap max-w-0 overflow-hidden opacity-0 transition-all duration-300">Report Scam</span>
+                <span class="absolute -bottom-7 left-1/2 -translate-x-1/2 bg-white text-navy text-xs rounded-lg px-2 py-1 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none sm:hidden z-20 whitespace-nowrap">Report</span>
+            </button>
+
+        </nav>
+    </div>
+
+    <style>
+        @keyframes elegantFadeIn {
+            0% { opacity: 0; transform: translateY(-150px) rotate(calc(var(--end-rot) - 15deg)); }
+            100% { opacity: 1; transform: translateY(0) rotate(var(--end-rot)); }
+        }
+        @keyframes elegantFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(15px); }
+        }
+        .animate-elegant-fade-in {
+            animation: elegantFadeIn 2.4s cubic-bezier(0.23, 0.86, 0.39, 0.96) forwards;
+            opacity: 0;
+        }
+        .animate-elegant-float {
+            animation: elegantFloat 12s ease-in-out infinite;
+        }
+
+        /* Expand label on hover */
+        .menu-bar-btn:hover .menu-bar-label,
+        .menu-bar-btn.active .menu-bar-label {
+            max-width: 120px;
+            opacity: 1;
+        }
+        /* Active button style */
+        .menu-bar-btn.active {
+            background: rgba(255,255,255,0.22);
+            border-color: rgba(255,255,255,0.4);
+            color: #fff;
+        }
+        /* Menu bar hide on scroll */
+        #animated-menu-bar.menu-bar-hidden {
+            opacity: 0;
+            transform: translateY(-16px);
+            pointer-events: none;
+        }
+    </style>
+
+    <script>
+        // ── Menu Bar: Expand Labels & Scroll-Hide ──────────────────────────────
+        (function() {
+            const bar = document.getElementById('animated-menu-bar');
+            let lastScroll = 0;
+            let hideTimer = null;
+
+            window.addEventListener('scroll', () => {
+                const currentScroll = window.scrollY;
+                if (currentScroll > lastScroll && currentScroll > 80) {
+                    // Scrolling DOWN — hide the bar
+                    bar.classList.add('menu-bar-hidden');
+                } else {
+                    // Scrolling UP — show the bar
+                    bar.classList.remove('menu-bar-hidden');
+                }
+                lastScroll = currentScroll;
+            }, { passive: true });
+
+            // Highlight active button based on current page
+            const path = window.location.pathname;
+            if (path.includes('home')) {
+                document.getElementById('mbtn-dashboard')?.classList.add('active');
+            }
+        })();
+    </script>
+
+
+    <script src="js/landing.js"></script>
+    <script src="js/magic-bento.js"></script>
+    <script src="js/api.js"></script>
+    <script>
+        // Check if user is logged in, and transform navbar buttons if so
+        document.addEventListener('DOMContentLoaded', async () => {
+            const token = api.getToken();
+            if (token) {
+                try {
+                    // Fetch profile to get real name/email
+                    const user = await api.get('/user/profile');
+                    const authContainer = document.querySelector('.flex.items-center.gap-4');
+
+                    if (authContainer && user) {
+                        const emailOrPhone = user.email || user.phone || 'Guardian';
+                        const initial = (user.name || emailOrPhone).charAt(0).toUpperCase();
+
+                        // Replace login/signup buttons with Dashboard Profile Button
+                        authContainer.innerHTML = `
+                            <a href="home.html" class="flex items-center gap-3 px-2 py-1.5 pr-4 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 transition drop-shadow-md">
+                                <div class="w-8 h-8 rounded-full bg-accent flex items-center justify-center font-bold text-white shadow-inner">
+                                    ${initial}
+                                </div>
+                                <span class="hidden sm:inline font-medium text-white">${emailOrPhone}</span>
+                            </a>
+                        `;
+                    }
+                } catch (e) {
+                    console.error("User token invalid or API error", e);
+                    // DO NOT clear token here blindly. It causes automatic logouts on network errors.
+                }
+            }
+        });
+    </script>
+
+    <!-- ═══════════════════════════════════════════════════
+         TargetCursor — vanilla JS port of ui.md component
+         ═══════════════════════════════════════════════════ -->
+    <script>
+    (function () {
+        // Skip on touch/mobile devices
+        const isMobile = ('ontouchstart' in window || navigator.maxTouchPoints > 0) && window.innerWidth <= 768;
+        if (isMobile) return;
+
+        const SPIN_DURATION   = 2;      // seconds per full rotation
+        const HOVER_DURATION  = 0.2;    // seconds for corners to snap
+        const TARGET_SELECTOR = '.cursor-target';
+        const BORDER_W        = 3;      // px overshoot around target
+        const CORNER_SIZE     = 12;     // px size of each corner bracket
+
+        // ── DOM refs ─────────────────────────────────────────────────
+        const wrapper  = document.getElementById('target-cursor');
+        const dot      = document.getElementById('cursor-dot');
+        if (!wrapper || !dot) return;
+        const corners  = Array.from(wrapper.querySelectorAll('.target-cursor-corner'));
+
+        // ── Position wrapper at mouse ─────────────────────────────────
+        gsap.set(wrapper, { x: window.innerWidth / 2, y: window.innerHeight / 2 });
+
+        // Corner default offsets (arranged around the dot)
+        const defaultOffsets = [
+            { x: -CORNER_SIZE * 1.5, y: -CORNER_SIZE * 1.5 }, // TL
+            { x:  CORNER_SIZE * 0.5, y: -CORNER_SIZE * 1.5 }, // TR
+            { x:  CORNER_SIZE * 0.5, y:  CORNER_SIZE * 0.5 }, // BR
+            { x: -CORNER_SIZE * 1.5, y:  CORNER_SIZE * 0.5 }, // BL
+        ];
+        corners.forEach((c, i) => gsap.set(c, defaultOffsets[i]));
+
+        // ── Continuous spin timeline ───────────────────────────────────
+        let spinTl = gsap.timeline({ repeat: -1 })
+            .to(wrapper, { rotation: '+=360', duration: SPIN_DURATION, ease: 'none' });
+
+        // ── Mouse follow (move the wrapper) ───────────────────────────
+        window.addEventListener('mousemove', e => {
+            gsap.to(wrapper, { x: e.clientX, y: e.clientY, duration: 0.1, ease: 'power3.out' });
+        });
+
+        // ── Click shrink on the dot ────────────────────────────────────
+        window.addEventListener('mousedown', () => {
+            gsap.to(dot,     { scale: 0.6, duration: 0.15 });
+            gsap.to(wrapper, { scale: 0.9, duration: 0.15 });
+        });
+        window.addEventListener('mouseup', () => {
+            gsap.to(dot,     { scale: 1, duration: 0.2 });
+            gsap.to(wrapper, { scale: 1, duration: 0.2 });
+        });
+
+        // ── Hover logic ────────────────────────────────────────────────
+        let activeTarget   = null;
+        let cleanupLeave   = null;
+        let resumeTimer    = null;
+        let activeStrength = { v: 0 };   // 0→1 tween target
+        let tickerActive   = false;
+        let targetPositions = null;       // absolute positions for each corner
+
+        function retractCorners() {
+            corners.forEach((c, i) => {
+                gsap.to(c, { ...defaultOffsets[i], duration: 0.3, ease: 'power3.out', overwrite: 'auto' });
+            });
+        }
+
+        function resumeSpin() {
+            if (activeTarget) return;
+            resumeTimer = setTimeout(() => {
+                if (activeTarget) return;
+                spinTl.kill();
+                spinTl = gsap.timeline({ repeat: -1 })
+                    .to(wrapper, { rotation: '+=360', duration: SPIN_DURATION, ease: 'none' });
+            }, 50);
+        }
+
+        // Ticker: smoothly move corners toward target rect corners
+        function ticker() {
+            if (!targetPositions || !tickerActive) return;
+
+            const wx = gsap.getProperty(wrapper, 'x');
+            const wy = gsap.getProperty(wrapper, 'y');
+            const s  = activeStrength.v;
+            if (s === 0) return;
+
+            corners.forEach((c, i) => {
+                const cx = gsap.getProperty(c, 'x');
+                const cy = gsap.getProperty(c, 'y');
+                // Target position is in screen coords; convert relative to wrapper
+                const tx = targetPositions[i].x - wx;
+                const ty = targetPositions[i].y - wy;
+                gsap.to(c, {
+                    x: cx + (tx - cx) * s,
+                    y: cy + (ty - cy) * s,
+                    duration: s >= 0.99 ? 0.18 : 0.05,
+                    ease: 'power1.out',
+                    overwrite: 'auto'
+                });
+            });
+        }
+
+        // Enter a cursor-target
+        function onEnter(target) {
+            if (activeTarget === target) return;
+            if (activeTarget && cleanupLeave) {
+                cleanupLeave();
+            }
+            if (resumeTimer) { clearTimeout(resumeTimer); resumeTimer = null; }
+
+            activeTarget = target;
+
+            // Pause spin, snap rotation to 0
+            gsap.killTweensOf(wrapper, 'rotation');
+            spinTl.pause();
+            gsap.set(wrapper, { rotation: 0 });
+
+            const rect = target.getBoundingClientRect();
+            targetPositions = [
+                { x: rect.left  - BORDER_W,                       y: rect.top    - BORDER_W },
+                { x: rect.right + BORDER_W - CORNER_SIZE,         y: rect.top    - BORDER_W },
+                { x: rect.right + BORDER_W - CORNER_SIZE,         y: rect.bottom + BORDER_W - CORNER_SIZE },
+                { x: rect.left  - BORDER_W,                       y: rect.bottom + BORDER_W - CORNER_SIZE },
+            ];
+
+            // Tween activeStrength 0→1
+            gsap.killTweensOf(activeStrength);
+            activeStrength.v = 0;
+            gsap.to(activeStrength, { v: 1, duration: HOVER_DURATION, ease: 'power2.out' });
+
+            tickerActive = true;
+            gsap.ticker.add(ticker);
+
+            function leaveHandler() {
+                gsap.ticker.remove(ticker);
+                tickerActive   = false;
+                targetPositions = null;
+                activeTarget   = null;
+                gsap.killTweensOf(activeStrength);
+                activeStrength.v = 0;
+
+                retractCorners();
+                target.removeEventListener('mouseleave', leaveHandler);
+                cleanupLeave = null;
+                resumeSpin();
+            }
+
+            cleanupLeave = leaveHandler;
+            target.addEventListener('mouseleave', leaveHandler);
+        }
+
+        // Delegate via mouseover on document
+        document.addEventListener('mouseover', e => {
+            const target = e.target.closest(TARGET_SELECTOR);
+            if (target) onEnter(target);
+        }, { passive: true });
+    })();
+    </script>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         FaultyTerminal WebGL — ported from backgroundui.md
+         Exact GLSL shader, vanilla JS, mix-blend-mode:screen overlay
+         ═══════════════════════════════════════════════════════════ -->
+    <script>
+    (function () {
+        const canvas = document.getElementById('faulty-canvas');
+        if (!canvas) return;
+
+        // ── Config (from usage example, tint adapted to site purple) ──
+        const CFG = {
+            scale:               1.5,
+            gridMul:             [2, 1],
+            digitSize:           1.2,
+            timeScale:           0.5,
+            scanlineIntensity:   0.5,
+            glitchAmount:        1.0,
+            flickerAmount:       1.0,
+            noiseAmp:            1.0,
+            chromaticAberration: 0.0,
+            dither:              0.0,
+            curvature:           0.1,
+            tint:                [0.545, 0.361, 0.965],  // #8B5CF6 purple accent
+            mouseStrength:       0.5,
+            brightness:          0.55,
+        };
+
+        // ── WebGL init ────────────────────────────────────────────────
+        const gl = canvas.getContext('webgl');
+        if (!gl) return;
+        gl.clearColor(0, 0, 0, 1);
+
+        // ── Shaders (exact GLSL from backgroundui.md) ─────────────────
+        const VS = `
+attribute vec2 position;
+attribute vec2 uv;
+varying vec2 vUv;
+void main() { vUv = uv; gl_Position = vec4(position, 0.0, 1.0); }`;
+
+        const FS = `
+precision mediump float;
+varying vec2 vUv;
+uniform float iTime;
+uniform vec3  iResolution;
+uniform float uScale;
+uniform vec2  uGridMul;
+uniform float uDigitSize;
+uniform float uScanlineIntensity;
+uniform float uGlitchAmount;
+uniform float uFlickerAmount;
+uniform float uNoiseAmp;
+uniform float uChromaticAberration;
+uniform float uDither;
+uniform float uCurvature;
+uniform vec3  uTint;
+uniform vec2  uMouse;
+uniform float uMouseStrength;
+uniform float uUseMouse;
+uniform float uPageLoadProgress;
+uniform float uUsePageLoadAnimation;
+uniform float uBrightness;
+
+float time;
+
+float hash21(vec2 p){
+  p = fract(p * 234.56);
+  p += dot(p, p + 34.56);
+  return fract(p.x * p.y);
+}
+
+float noise(vec2 p){
+  return sin(p.x * 10.0) * sin(p.y * (3.0 + sin(time * 0.090909))) + 0.2;
+}
+
+mat2 rotate(float a){ float c=cos(a),s=sin(a); return mat2(c,-s,s,c); }
+
+float fbm(vec2 p){
+  p *= 1.1;
+  float f = 0.0;
+  float amp = 0.5 * uNoiseAmp;
+  f += amp * noise(p); p = rotate(time*0.02)*p*2.0; amp *= 0.454545;
+  f += amp * noise(p);
+  return f;
+}
+
+float pattern(vec2 p, out vec2 q, out vec2 r){
+  q = vec2(fbm(p+vec2(1.0)), fbm(rotate(0.1*time)*p+vec2(1.0)));
+  r = vec2(fbm(rotate(0.1)*q+vec2(0.0)), fbm(q+vec2(0.0)));
+  return fbm(p+r);
+}
+
+float digit(vec2 p){
+  vec2 grid = uGridMul * 15.0;
+  vec2 s = floor(p*grid)/grid;
+  p = p*grid;
+  vec2 q,r;
+  float intensity = pattern(s*0.1,q,r)*1.3 - 0.03;
+  if(uUseMouse > 0.5){
+    vec2 mw = uMouse * uScale;
+    float d = distance(s, mw);
+    float mi = exp(-d*8.0)*uMouseStrength*10.0;
+    intensity += mi;
+    intensity += sin(d*20.0 - iTime*5.0)*0.1*mi;
+  }
+  if(uUsePageLoadAnimation > 0.5){
+    float cr = fract(sin(dot(s,vec2(12.9898,78.233)))*43758.5453);
+    float cp = clamp((uPageLoadProgress - cr*0.8)/0.2, 0.0, 1.0);
+    intensity *= smoothstep(0.0,1.0,cp);
+  }
+  p = fract(p)*uDigitSize;
+  float px5=p.x*5.0, py5=(1.0-p.y)*5.0;
+  float x=fract(px5), y=fract(py5);
+  float i=floor(py5)-2.0, j=floor(px5)-2.0;
+  float n=i*i+j*j;
+  float f=n*0.0625;
+  float isOn=step(0.1, intensity-f);
+  float brightness=isOn*(0.2+y*0.8)*(0.75+x*0.25);
+  return step(0.0,p.x)*step(p.x,1.0)*step(0.0,p.y)*step(p.y,1.0)*brightness;
+}
+
+float onOff(float a,float b,float c){
+  return step(c, sin(iTime+a*cos(iTime*b)))*uFlickerAmount;
+}
+
+float displace(vec2 look){
+  float y = look.y - mod(iTime*0.25,1.0);
+  float window = 1.0/(1.0+50.0*y*y);
+  return sin(look.y*20.0+iTime)*0.0125*onOff(4.0,2.0,0.8)*(1.0+cos(iTime*60.0))*window;
+}
+
+vec3 getColor(vec2 p){
+  float bar = step(mod(p.y+time*20.0,1.0),0.2)*0.4+1.0;
+  bar *= uScanlineIntensity;
+  float disp = displace(p);
+  p.x += disp;
+  if(uGlitchAmount != 1.0) p.x += disp*(uGlitchAmount-1.0);
+  float middle = digit(p);
+  /* 5-tap cross blur (cheaper than 9-tap grid, still looks great) */
+  const float off = 0.0025;
+  float sum = digit(p+vec2(0.0,-off))
+            + digit(p+vec2(-off,0.0)) + middle + digit(p+vec2(off,0.0))
+            + digit(p+vec2(0.0, off));
+  return vec3(0.9)*middle + sum*0.08*vec3(1.0)*bar;
+}
+
+vec2 barrel(vec2 uv){
+  vec2 c=uv*2.0-1.0;
+  float r2=dot(c,c);
+  c *= 1.0+uCurvature*r2;
+  return c*0.5+0.5;
+}
+
+void main(){
+  time = iTime * 0.333333;
+  vec2 uv = vUv;
+  if(uCurvature != 0.0) uv = barrel(uv);
+  vec2 p = uv * uScale;
+  vec3 col = getColor(p);
+  if(uChromaticAberration != 0.0){
+    vec2 ca = vec2(uChromaticAberration)/iResolution.xy;
+    col.r = getColor(p+ca).r;
+    col.b = getColor(p-ca).b;
+  }
+  col *= uTint * uBrightness;
+  if(uDither > 0.0) col += (hash21(gl_FragCoord.xy)-0.5)*(uDither*0.003922);
+  gl_FragColor = vec4(col, 1.0);
+}`;
+
+        // ── Compile helpers ───────────────────────────────────────────
+        function compile(type, src) {
+            const s = gl.createShader(type);
+            gl.shaderSource(s, src); gl.compileShader(s);
+            if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) console.error(gl.getShaderInfoLog(s));
+            return s;
+        }
+        const prog = gl.createProgram();
+        gl.attachShader(prog, compile(gl.VERTEX_SHADER,   VS));
+        gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, FS));
+        gl.linkProgram(prog); gl.useProgram(prog);
+
+        // ── Full-screen triangle ──────────────────────────────────────
+        const buf = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+            -1,-1, 0,0,  3,-1, 2,0,  -1,3, 0,2
+        ]), gl.STATIC_DRAW);
+        const aPOS = gl.getAttribLocation(prog, 'position');
+        const aUV  = gl.getAttribLocation(prog, 'uv');
+        gl.enableVertexAttribArray(aPOS); gl.vertexAttribPointer(aPOS, 2, gl.FLOAT, false, 16, 0);
+        gl.enableVertexAttribArray(aUV);  gl.vertexAttribPointer(aUV,  2, gl.FLOAT, false, 16, 8);
+
+        // ── Uniforms ──────────────────────────────────────────────────
+        const U = {};
+        ['iTime','iResolution','uScale','uGridMul','uDigitSize','uScanlineIntensity',
+         'uGlitchAmount','uFlickerAmount','uNoiseAmp','uChromaticAberration','uDither',
+         'uCurvature','uTint','uMouse','uMouseStrength','uUseMouse',
+         'uPageLoadProgress','uUsePageLoadAnimation','uBrightness'
+        ].forEach(n => U[n] = gl.getUniformLocation(prog, n));
+
+        // Set static uniforms
+        gl.uniform1f(U.uScale,               CFG.scale);
+        gl.uniform2f(U.uGridMul,             CFG.gridMul[0], CFG.gridMul[1]);
+        gl.uniform1f(U.uDigitSize,           CFG.digitSize);
+        gl.uniform1f(U.uScanlineIntensity,   CFG.scanlineIntensity);
+        gl.uniform1f(U.uGlitchAmount,        CFG.glitchAmount);
+        gl.uniform1f(U.uFlickerAmount,       CFG.flickerAmount);
+        gl.uniform1f(U.uNoiseAmp,            CFG.noiseAmp);
+        gl.uniform1f(U.uChromaticAberration, CFG.chromaticAberration);
+        gl.uniform1f(U.uDither,              CFG.dither);
+        gl.uniform1f(U.uCurvature,           CFG.curvature);
+        gl.uniform3f(U.uTint,                CFG.tint[0], CFG.tint[1], CFG.tint[2]);
+        gl.uniform1f(U.uMouseStrength,       CFG.mouseStrength);
+        gl.uniform1i(U.uUseMouse,            1);
+        gl.uniform1f(U.uUsePageLoadAnimation,1);
+        gl.uniform1f(U.uPageLoadProgress,    0);
+        gl.uniform1f(U.uBrightness,          CFG.brightness);
+
+        // ── Resize ────────────────────────────────────────────────────
+        function resize() {
+            /* Lock to 1× DPR — this is a background effect, 1px is enough */
+            canvas.width  = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            gl.viewport(0, 0, canvas.width, canvas.height);
+            gl.uniform3f(U.iResolution, canvas.width, canvas.height, canvas.width / canvas.height);
+        }
+        const ro = new ResizeObserver(resize);
+        ro.observe(canvas.parentElement);
+        resize();
+
+        // ── Mouse ─────────────────────────────────────────────────────
+        const smoothMouse = { x: 0.5, y: 0.5 };
+        const targetMouse = { x: 0.5, y: 0.5 };
+        /* Listen on window — canvas parent has pointer-events:none so
+           canvas.parentElement won't fire. Convert page coords to canvas UV. */
+        window.addEventListener('mousemove', e => {
+            const r = canvas.getBoundingClientRect();
+            // Only update when cursor is inside the hero canvas area
+            targetMouse.x = (e.clientX - r.left) / r.width;
+            targetMouse.y = 1 - (e.clientY - r.top)  / r.height;
+        }, { passive: true });
+
+        // ── Page-load animation time tracking ─────────────────────────
+        let loadStart = 0;
+        const LOAD_DURATION = 2000; // ms
+        const timeOffset = Math.random() * 100;
+
+        // ── Render loop ───────────────────────────────────────────────
+        function frame(ts) {
+            if (!loadStart) loadStart = ts;
+            const loadProgress = Math.min((ts - loadStart) / LOAD_DURATION, 1);
+
+            const t = (ts * 0.001 + timeOffset) * CFG.timeScale;
+
+            // Smooth mouse lerp
+            const lf = 0.08;
+            smoothMouse.x += (targetMouse.x - smoothMouse.x) * lf;
+            smoothMouse.y += (targetMouse.y - smoothMouse.y) * lf;
+
+            gl.clear(gl.COLOR_BUFFER_BIT);
+            gl.uniform1f(U.iTime,            t);
+            gl.uniform1f(U.uPageLoadProgress,loadProgress);
+            gl.uniform2f(U.uMouse,           smoothMouse.x, smoothMouse.y);
+            gl.drawArrays(gl.TRIANGLES, 0, 3);
+            requestAnimationFrame(frame);
+        }
+        requestAnimationFrame(frame);
+    })();
+    </script>
+</body>
+
+</html>

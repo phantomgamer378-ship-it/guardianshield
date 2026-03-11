@@ -1,0 +1,37 @@
+# Netlify deploy ignore file
+# Files/dirs excluded from the Netlify build context
+
+# Dev database files (app uses InsForge/cloud DB in production)
+server/db/guardianshield.db
+server/db/guardianshield.db-shm
+server/db/guardianshield.db-wal
+server/db/*.csv
+server/db/db_backup_before_sync/
+server/db_backup_before_sync/
+
+# Local uploads (use cloud storage in production)
+uploads/
+server/uploads/
+
+# Test files
+test_*.js
+test_*.wav
+test_*.mp4
+*.log
+server.log
+
+# Dev tooling
+.dockerignore
+Dockerfile
+docker-compose.yml
+backup.sh
+DEPLOYMENT.md
+
+# Editor / OS
+.DS_Store
+.vscode/
+*.swp
+
+# Env (set in Netlify Dashboard, not committed)
+.env
+.env.*

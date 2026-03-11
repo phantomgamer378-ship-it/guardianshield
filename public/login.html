@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In - GuardianShield</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: '#1B2A4A',
+                        accent: '#2563EB',
+                        redAlert: '#DC2626',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-gray-50 flex min-h-screen">
+    <div class="min-h-screen w-full grid lg:grid-cols-2">
+        <!-- Left Content Section -->
+        <div
+            class="relative hidden lg:flex flex-col justify-between bg-gradient-to-br from-navy/90 via-navy to-navy/80 p-12 text-white overflow-hidden">
+            <div class="relative z-20">
+                <a href="index.html" class="flex items-center gap-2 text-lg font-semibold hover:opacity-80 transition">
+                    <div class="w-8 h-8 rounded-lg bg-white/10 backdrop-blur-sm flex items-center justify-center">
+                        <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        </svg>
+                    </div>
+                    <span>GuardianShield</span>
+                </a>
+            </div>
+
+            <div class="relative z-20 flex items-end justify-center h-[500px]">
+                <!-- Cartoon Characters -->
+                <div class="relative w-[550px] h-[400px]">
+                    <!-- Purple character -->
+                    <div id="char-purple" class="absolute bottom-0 transition-all duration-700 ease-in-out"
+                        style="left:70px; width:180px; height:400px; background-color:#6C3FF5; border-radius:10px 10px 0 0; z-index:1; transform-origin:bottom center;">
+                        <div id="purple-eyes" class="absolute flex gap-8 transition-all duration-700 ease-in-out">
+                            <div class="eyeball rounded-full flex items-center justify-center transition-all duration-150 overflow-hidden"
+                                style="width:18px; height:18px; background-color:white;">
+                                <div class="pupil rounded-full transition-transform duration-100 ease-out"
+                                    style="width:7px; height:7px; background-color:#2D2D2D;"></div>
+                            </div>
+                            <div class="eyeball rounded-full flex items-center justify-center transition-all duration-150 overflow-hidden"
+                                style="width:18px; height:18px; background-color:white;">
+                                <div class="pupil rounded-full transition-transform duration-100 ease-out"
+                                    style="width:7px; height:7px; background-color:#2D2D2D;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Black character -->
+                    <div id="char-black" class="absolute bottom-0 transition-all duration-700 ease-in-out"
+                        style="left:240px; width:120px; height:310px; background-color:#2D2D2D; border-radius:8px 8px 0 0; z-index:2; transform-origin:bottom center;">
+                        <div id="black-eyes" class="absolute flex gap-6 transition-all duration-700 ease-in-out">
+                            <div class="eyeball rounded-full flex items-center justify-center transition-all duration-150 overflow-hidden"
+                                style="width:16px; height:16px; background-color:white;">
+                                <div class="pupil rounded-full transition-transform duration-100 ease-out"
+                                    style="width:6px; height:6px; background-color:#2D2D2D;"></div>
+                            </div>
+                            <div class="eyeball rounded-full flex items-center justify-center transition-all duration-150 overflow-hidden"
+                                style="width:16px; height:16px; background-color:white;">
+                                <div class="pupil rounded-full transition-transform duration-100 ease-out"
+                                    style="width:6px; height:6px; background-color:#2D2D2D;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Orange character -->
+                    <div id="char-orange" class="absolute bottom-0 transition-all duration-700 ease-in-out"
+                        style="left:0px; width:240px; height:200px; z-index:3; background-color:#FF9B6B; border-radius:120px 120px 0 0; transform-origin:bottom center;">
+                        <div id="orange-eyes" class="absolute flex gap-8 transition-all duration-200 ease-out">
+                            <div class="rounded-full flex items-center justify-center overflow-hidden"
+                                style="width:12px; height:12px;">
+                                <div class="pupil rounded-full transition-transform duration-100 ease-out"
+                                    style="width:12px; height:12px; background-color:#2D2D2D;"></div>
+                            </div>
+                            <div class="rounded-full flex items-center justify-center overflow-hidden"
+                                style="width:12px; height:12px;">
+                                <div class="pupil rounded-full transition-transform duration-100 ease-out"
+                                    style="width:12px; height:12px; background-color:#2D2D2D;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Yellow character -->
+                    <div id="char-yellow" class="absolute bottom-0 transition-all duration-700 ease-in-out"
+                        style="left:310px; width:140px; height:230px; background-color:#E8D754; border-radius:70px 70px 0 0; z-index:4; transform-origin:bottom center;">
+                        <div id="yellow-eyes" class="absolute flex gap-6 transition-all duration-200 ease-out">
+                            <div class="rounded-full flex items-center justify-center overflow-hidden"
+                                style="width:12px; height:12px;">
+                                <div class="pupil rounded-full transition-transform duration-100 ease-out"
+                                    style="width:12px; height:12px; background-color:#2D2D2D;"></div>
+                            </div>
+                            <div class="rounded-full flex items-center justify-center overflow-hidden"
+                                style="width:12px; height:12px;">
+                                <div class="pupil rounded-full transition-transform duration-100 ease-out"
+                                    style="width:12px; height:12px; background-color:#2D2D2D;"></div>
+                            </div>
+                        </div>
+                        <div id="yellow-mouth"
+                            class="absolute w-20 h-[4px] bg-[#2D2D2D] rounded-full transition-all duration-200 ease-out">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative z-20 flex items-center gap-8 text-sm text-white/60">
+                <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+                <a href="#" class="hover:text-white transition-colors">Contact</a>
+            </div>
+
+            <!-- Decorative elements -->
+            <div class="absolute inset-0 bg-white/[0.05]"
+                style="background-image: radial-gradient(circle, white 1px, transparent 1px); background-size: 20px 20px; opacity: 0.1;">
+            </div>
+            <div class="absolute top-1/4 right-1/4 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-1/4 left-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl"></div>
+        </div>
+
+        <!-- Right Login Section -->
+        <div class="flex items-center justify-center p-8 bg-white relative">
+            <div class="w-full max-w-[420px]">
+                <!-- Mobile Logo -->
+                <div class="lg:hidden flex items-center justify-center gap-2 text-lg font-semibold mb-12">
+                    <div class="w-8 h-8 rounded-lg bg-navy/10 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        </svg>
+                    </div>
+                    <span>GuardianShield</span>
+                </div>
+
+                <!-- Header -->
+                <div class="text-center mb-10">
+                    <h1 class="text-3xl font-bold tracking-tight mb-2 text-navy">Welcome back!</h1>
+                    <p class="text-gray-500 text-sm">Please enter your details</p>
+                </div>
+
+                <!-- Login Form -->
+                <form id="login-form" class="space-y-5">
+                    <div id="error-msg"
+                        class="hidden bg-red-50 text-red-600 p-4 rounded-xl text-sm border border-red-100 text-center font-medium">
+                    </div>
+
+                    <div class="space-y-2">
+                        <label for="email" class="text-sm font-medium text-gray-700">Email</label>
+                        <input type="email" id="email" required placeholder="name@example.com" autocomplete="off"
+                            class="flex h-12 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent disabled:cursor-not-allowed disabled:opacity-50">
+                    </div>
+
+                    <div class="space-y-2">
+                        <label for="password" class="text-sm font-medium text-gray-700">Password</label>
+                        <div class="relative">
+                            <input type="password" id="password" required placeholder="••••••••"
+                                class="flex h-12 w-full rounded-md border border-gray-300 bg-white px-3 py-2 pr-10 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent disabled:cursor-not-allowed disabled:opacity-50">
+                            <button type="button" id="toggle-password"
+                                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">
+                                <svg id="toggle-password-icon" class="w-5 h-5" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <!-- Eye off normally (default password state) -->
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <input type="checkbox" id="remember"
+                                class="h-4 w-4 rounded-sm border-gray-300 text-accent focus:ring-accent">
+                            <label for="remember"
+                                class="text-sm font-medium leading-none text-gray-700 cursor-pointer">Remember for 30
+                                days</label>
+                        </div>
+                        <a href="#" class="text-sm text-accent hover:underline font-medium">Forgot password?</a>
+                    </div>
+
+                    <button type="submit" id="submit-btn"
+                        class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-base font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:pointer-events-none disabled:opacity-50 bg-accent text-white hover:bg-blue-600 h-12 w-full mt-2 shadow-sm">
+                        <span id="btn-text">Sign In</span>
+                    </button>
+                </form>
+
+                <!-- Social Login -->
+                <div class="mt-6">
+                    <button type="button"
+                        class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:pointer-events-none disabled:opacity-50 border border-gray-300 bg-white hover:bg-gray-50 text-gray-900 h-12 w-full">
+                        <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                            </path>
+                        </svg>
+                        Log in with Google
+                    </button>
+                </div>
+
+                <!-- Sign Up Link -->
+                <div class="text-center text-sm text-gray-500 mt-8">
+                    Don't have an account? <a href="signup.html" class="text-accent font-medium hover:underline">Sign
+                        Up</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/auth-animation.js"></script>
+</body>
+
+</html>
