@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download GuardianShield - Android APK</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/magic-bento.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: '#050511',
+                        accent: '#8B5CF6',
+                        redAlert: '#EF4444',
+                    },
+                    keyframes: {
+                        fadeUp: {
+                            '0%': { opacity: 0, transform: 'translateY(30px)' },
+                            '100%': { opacity: 1, transform: 'translateY(0)' }
+                        }
+                    },
+                    animation: {
+                        'fade-up': 'fadeUp 1s cubic-bezier(0.25, 0.4, 0.25, 1) forwards'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-navy text-gray-100 min-h-screen selection:bg-accent selection:text-white flex flex-col justify-between">
+
+    <!-- NAVBAR -->
+    <nav class="fixed w-full z-50 transition-all duration-300 py-4 px-6 md:px-12 flex justify-between items-center text-white bg-navy/80 backdrop-blur-xl border-b border-white/10 pointer-events-auto">
+        <a href="index.html" class="flex items-center gap-2 hover:opacity-80 transition cursor-pointer">
+            <svg class="w-8 h-8 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            <span class="font-bold text-xl tracking-tight">GuardianShield</span>
+        </a>
+        <div class="hidden md:flex items-center gap-8 font-medium">
+            <a href="index.html#features" class="hover:text-accent transition drop-shadow-md">Features</a>
+            <a href="index.html#how-it-works" class="hover:text-accent transition drop-shadow-md">How It Works</a>
+        </div>
+        <div class="flex items-center gap-4">
+            <a href="login.html" class="hidden sm:block px-4 py-2 rounded-full border border-white/30 hover:bg-white/10 transition drop-shadow-md">Log In</a>
+            <a href="signup.html" class="px-5 py-2 rounded-full bg-accent hover:bg-purple-600 transition font-bold shadow-[0_0_15px_rgba(139,92,246,0.5)]">Free Protection</a>
+        </div>
+    </nav>
+
+    <!-- CONTENT -->
+    <main class="relative z-10 w-full flex-grow flex flex-col items-center justify-center px-6 pt-32 pb-20">
+        
+        <!-- Animated Background Elements -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none -z-10">
+            <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-accent/20 rounded-full blur-[100px] opacity-50 mix-blend-screen animate-pulse duration-[4s]"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-900/30 rounded-full blur-[100px] opacity-50 mix-blend-screen animate-pulse duration-[6s]"></div>
+        </div>
+
+        <div class="max-w-2xl w-full text-center p-8 lg:p-12 rounded-[2rem] bg-white/[0.03] border border-white/10 shadow-[0_0_50px_rgba(139,92,246,0.1)] backdrop-blur-xl relative overflow-hidden group hover:border-accent/30 transition-colors duration-500 animate-[fadeUp_0.8s_ease-out_forwards]">
+            
+            <div class="absolute inset-0 bg-gradient-to-br from-accent/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+            <div class="relative z-10">
+                <div class="w-24 h-24 mx-auto bg-navy/80 rounded-3xl flex items-center justify-center mb-8 border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.05)] transform rotate-3 group-hover:rotate-0 group-hover:scale-110 transition-all duration-500 ease-out">
+                    <svg class="w-12 h-12 text-green-400" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M17.523 15.3414C17.523 15.3414 17.523 15.3414 17.523 15.3414C17.523 15.3414 17.523 15.3414 17.523 15.3414C17.514 15.3414 17.502 15.3414 17.484 15.3414C17.448 15.3414 17.394 15.3384 17.325 15.3234C17.187 15.2934 16.989 15.2154 16.746 15.0084C16.326 14.6544 15.759 13.9704 15.249 13.0644C14.736 12.1494 14.307 11.0334 14.079 9.8754C13.854 8.7354 13.83 7.5684 14.049 6.5514C14.157 6.0444 14.319 5.5884 14.538 5.1954C14.757 4.8054 15.03 4.4784 15.357 4.2234C15.861 3.8244 16.488 3.5934 17.199 3.5424C17.91 3.4914 18.669 3.6264 19.347 3.9654C20.025 4.3044 20.61 4.8414 21.036 5.5404C21.465 6.2424 21.729 7.0734 21.801 7.9134C21.876 8.7834 21.762 9.7734 21.444 10.7454C21.129 11.7144 20.625 12.6504 20.004 13.4334C19.38 14.2254 18.648 14.8644 17.979 15.2484C17.703 15.4044 17.466 15.4944 17.292 15.5364C17.118 15.5784 16.992 15.5844 16.923 15.5844H16.92H16.917C16.917 15.5844 16.917 15.5844 16.917 15.5844L17.523 15.3414ZM8.454 15.3414C8.454 15.3414 8.454 15.3414 8.454 15.3414C8.454 15.3414 8.454 15.3414 8.454 15.3414C8.463 15.3414 8.475 15.3414 8.493 15.3414C8.529 15.3414 8.583 15.3384 8.652 15.3234C8.79 15.2934 8.988 15.2154 9.231 15.0084C9.651 14.6544 10.218 13.9704 10.728 13.0644C11.241 12.1494 11.67 11.0334 11.898 9.8754C12.123 8.7354 12.147 7.5684 11.928 6.5514C11.82 6.0444 11.658 5.5884 11.439 5.1954C11.22 4.8054 10.947 4.4784 10.62 4.2234C10.116 3.8244 9.489 3.5934 8.778 3.5424C8.067 3.4914 7.308 3.6264 6.63 3.9654C5.952 4.3044 5.367 4.8414 4.941 5.5404C4.512 6.2424 4.248 7.0734 4.176 7.9134C4.101 8.7834 4.215 9.7734 4.533 10.7454C4.848 11.7144 5.352 12.6504 5.973 13.4334C6.597 14.2254 7.329 14.8644 7.998 15.2484C8.274 15.4044 8.511 15.4944 8.685 15.5364C8.859 15.5784 8.985 15.5844 9.054 15.5844H9.057H9.06C9.06 15.5844 9.06 15.5844 9.06 15.5844L8.454 15.3414Z" fill="currentColor"/>
+                        <path d="M11.996 20.916H11.987C11.987 20.916 11.987 20.913 11.987 20.91C11.987 20.91 11.987 20.913 11.987 20.913L11.996 20.916ZM11.996 20.916C11.996 20.916 11.996 20.916 11.996 20.916C11.996 20.916 11.996 20.916 11.996 20.916L11.996 20.916Z" fill="currentColor"/>
+                        <path d="M12 21.9996C11.451 21.9996 10.989 21.6096 10.875 21.0546L10.02 16.8996C9.921 16.4256 10.224 15.9606 10.695 15.8616C11.166 15.7626 11.631 16.0656 11.73 16.5366L12 17.8446L12.27 16.5366C12.369 16.0656 12.834 15.7626 13.305 15.8616C13.776 15.9606 14.079 16.4256 13.98 16.8996L13.125 21.0546C13.011 21.6096 12.549 21.9996 12 21.9996Z" fill="currentColor"/>
+                    </svg>
+                </div>
+                
+                <h1 class="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight text-white drop-shadow-lg">
+                    GuardianShield for Android
+                </h1>
+                
+                <p class="text-xl text-gray-400 mb-10 max-w-lg mx-auto font-light leading-relaxed">
+                    Install our Android App for real-time protection against deepfake audio, scam calls, and phishing attempts.
+                </p>
+
+                <div class="space-y-4">
+                    <a href="/downloads/guardianshield-latest.apk" download class="inline-flex items-center justify-center gap-3 w-full sm:w-auto px-10 py-5 rounded-full bg-accent hover:bg-purple-500 transition-all font-bold text-center shadow-[0_0_30px_rgba(139,92,246,0.6)] hover:shadow-[0_0_40px_rgba(139,92,246,0.8)] text-xl hover:-translate-y-1 duration-300 text-white border border-accent/50 group">
+                        <svg class="w-7 h-7 group-hover:animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                        </svg>
+                        Download APK
+                    </a>
+                    <p class="text-sm text-gray-500 mt-6 flex flex-col items-center gap-2">
+                        <span>Version 1.0.0 • 35.4 MB • Android 8.0+ Required</span>
+                        <a href="#installation" class="text-accent hover:text-purple-400 underline decoration-purple-500/30 underline-offset-4 transition">How to install an APK?</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Installation Instructions Section underneath -->
+        <div id="installation" class="mt-24 max-w-4xl w-full">
+            <h2 class="text-3xl font-bold mb-10 text-center text-white drop-shadow-sm">Installation Guide</h2>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm relative overflow-hidden group hover:bg-white/10 transition-colors">
+                    <div class="text-accent font-black text-6xl absolute -top-4 -right-2 opacity-10 group-hover:opacity-20 transition-opacity">1</div>
+                    <div class="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center text-accent mb-4">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    </div>
+                    <h3 class="font-bold text-white text-lg mb-2">Download</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Tap the download button above to save the GuardianShield APK file to your device.</p>
+                </div>
+                
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm relative overflow-hidden group hover:bg-white/10 transition-colors">
+                    <div class="text-accent font-black text-6xl absolute -top-4 -right-2 opacity-10 group-hover:opacity-20 transition-opacity">2</div>
+                    <div class="w-12 h-12 rounded-xl bg-orange-500/20 flex items-center justify-center text-orange-400 mb-4">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                    </div>
+                    <h3 class="font-bold text-white text-lg mb-2">Allow Unknown Apps</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Go to your device <strong>Settings &gt; Security</strong> and enable "Install from Unknown Sources".</p>
+                </div>
+                
+                <div class="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm relative overflow-hidden group hover:bg-white/10 transition-colors">
+                    <div class="text-accent font-black text-6xl absolute -top-4 -right-2 opacity-10 group-hover:opacity-20 transition-opacity">3</div>
+                    <div class="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center text-green-400 mb-4">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <h3 class="font-bold text-white text-lg mb-2">Install &amp; Launch</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Open the downloaded file and tap Install. Launch the app and sign in to get protected.</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-[#030308] text-gray-300 text-opacity-80 pt-16 pb-10 border-t border-white/5 pointer-events-auto relative z-20 w-full mt-20">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center text-sm border-t border-white/10 pt-8 mt-8">
+                <div class="flex items-center gap-2 mb-4 md:mb-0">
+                    <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    <span class="font-bold tracking-tight text-white drop-shadow-sm">GuardianShield</span>
+                </div>
+                <p>&copy; 2026 GuardianShield. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/api.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const token = api.getToken();
+            if (token) {
+                try {
+                    const user = await api.get('/user/profile');
+                    const authContainer = document.querySelector('.flex.items-center.gap-4');
+
+                    if (authContainer && user) {
+                        const emailOrPhone = user.email || user.phone || 'Guardian';
+                        const initial = (user.name || emailOrPhone).charAt(0).toUpperCase();
+
+                        authContainer.innerHTML = `
+                            <a href="home.html" class="flex items-center gap-3 px-2 py-1.5 pr-4 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 transition drop-shadow-md">
+                                <div class="w-8 h-8 rounded-full bg-accent flex items-center justify-center font-bold text-white shadow-inner">
+                                    ${initial}
+                                </div>
+                                <span class="hidden sm:inline font-medium text-white">${emailOrPhone}</span>
+                            </a>
+                        `;
+                    }
+                } catch (e) {
+                    console.error("User token invalid or API error", e);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

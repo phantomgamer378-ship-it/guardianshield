@@ -499,6 +499,7 @@ body::after {
         radial-gradient(circle at center, transparent 30%, var(--col-bg) 60%);
     animation: rotateSlow 20s linear infinite;
     opacity: 0.4;
+    z-index: 1;
 }
 
 .gs-mesh-hero::after {
@@ -507,6 +508,7 @@ body::after {
     inset: 0;
     backdrop-filter: blur(40px);
     -webkit-backdrop-filter: blur(40px);
+    z-index: 0;
 }
 
 @keyframes rotateSlow {
@@ -519,15 +521,16 @@ body::after {
     }
 }
 
-/* Overlay text on top of Spline */
+/* Overlay text on top of mesh layers */
 .gs-hero-overlay {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
     padding: 28px 32px;
-    background: linear-gradient(to top, rgba(7, 9, 15, 0.9) 0%, rgba(7, 9, 15, 0.3) 70%, transparent 100%);
+    background: linear-gradient(to top, rgba(7, 9, 15, 0.95) 0%, rgba(7, 9, 15, 0.5) 60%, transparent 100%);
     pointer-events: none;
+    z-index: 2;
 }
 
 .gs-hero-overlay h1 {
@@ -539,11 +542,13 @@ body::after {
     -webkit-text-fill-color: transparent;
     background-clip: text;
     margin-bottom: 4px;
+    text-shadow: none; /* gradient text can't use text-shadow */
 }
 
 .gs-hero-overlay p {
     font-size: 0.875rem;
-    color: rgba(255, 255, 255, 0.55);
+    color: rgba(255, 255, 255, 0.65);
+    text-shadow: 0 1px 8px rgba(0,0,0,0.8);
 }
 
 /* Spline loading skeleton */

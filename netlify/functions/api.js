@@ -40,6 +40,16 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // ── mount routes ─────────────────────────────────────────────────────────────
+app.use((req, res, next) => {
+    // serverless-http/Netlify sometimes passes the body as a raw Buffer or String
+    if (Buffer.isBuffer(req.body)) {
+        try { req.body = JSON.parse(req.body.toString('utf8')); } catch (e) {}
+    } else if (typeof req.body === 'string') {
+        try { req.body = JSON.parse(req.body); } catch (e) {}
+    }
+    next();
+});
+
 app.use('/api/auth',   authRoutes);
 app.use('/api/phone',  phoneRoutes);
 app.use('/api/video',  videoRoutes);
@@ -47,6 +57,7 @@ app.use('/api/report', reportRoutes);
 app.use('/api/user',   userRoutes);
 
 app.get('/api',     (_req, res) => res.json({ message: 'GuardianShield API v1.0' }));
+app.post('/api/echo', (req, res) => res.json({ body: req.body, type: typeof req.body, isBuffer: Buffer.isBuffer(req.body) }));
 app.get('/health',  (_req, res) => res.json({ status: 'OK', timestamp: new Date().toISOString() }));
 
 app.use(errorMiddleware);

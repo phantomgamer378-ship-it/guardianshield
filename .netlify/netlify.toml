@@ -1,0 +1,108 @@
+functionsDirectory = "/Users/vishalchauhan/Library/Mobile Documents/com~apple~CloudDocs/habitual/chat bot/guardianshield/netlify/functions"
+functionsDirectoryOrigin = "config-v1"
+redirectsOrigin = "config"
+plugins = []
+headers = []
+
+[build]
+publish = "/Users/vishalchauhan/Library/Mobile Documents/com~apple~CloudDocs/habitual/chat bot/guardianshield/public"
+publishOrigin = "config"
+commandOrigin = "config"
+command = "npm install"
+functions = "/Users/vishalchauhan/Library/Mobile Documents/com~apple~CloudDocs/habitual/chat bot/guardianshield/netlify/functions"
+
+[build.environment]
+NODE_VERSION = "18"
+NODE_ENV = "production"
+
+[build.processing]
+
+[build.processing.css]
+
+[build.processing.html]
+
+[build.processing.images]
+
+[build.processing.js]
+
+[build.services]
+
+[functions]
+
+[functions.api]
+timeout = 26.0
+
+[functions."*"]
+node_bundler = "esbuild"
+
+[[redirects]]
+from = "/api/*"
+to = "/.netlify/functions/api/:splat"
+status = 200.0
+force = false
+
+[redirects.query]
+
+[redirects.conditions]
+
+[redirects.headers]
+
+[[redirects]]
+from = "/home.html"
+to = "/home.html"
+status = 200.0
+force = false
+
+[redirects.query]
+
+[redirects.conditions]
+
+[redirects.headers]
+
+[[redirects]]
+from = "/login.html"
+to = "/login.html"
+status = 200.0
+force = false
+
+[redirects.query]
+
+[redirects.conditions]
+
+[redirects.headers]
+
+[[redirects]]
+from = "/signup.html"
+to = "/signup.html"
+status = 200.0
+force = false
+
+[redirects.query]
+
+[redirects.conditions]
+
+[redirects.headers]
+
+[[redirects]]
+from = "/profile.html"
+to = "/profile.html"
+status = 200.0
+force = false
+
+[redirects.query]
+
+[redirects.conditions]
+
+[redirects.headers]
+
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 404.0
+force = false
+
+[redirects.query]
+
+[redirects.conditions]
+
+[redirects.headers]
