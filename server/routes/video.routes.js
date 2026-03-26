@@ -6,17 +6,25 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// Use disk storage so file.path is available for heuristic analysis
-const uploadDir = path.join(__dirname, '../../uploads');
-if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
+// Detect Lambda/Netlify environment — no writable disk available
+const isLambda = !!(process.env.LAMBDA_TASK_ROOT || process.env.NETLIFY);
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, uploadDir),
-    filename: (req, file, cb) => {
-        const unique = Date.now() + '-' + Math.round(Math.random() * 1e9);
-        cb(null, unique + path.extname(file.originalname || '.bin'));
-    }
-});
+let storage;
+if (isLambda) {
+    // Memory storage: file is available as file.buffer (no disk writes)
+    storage = multer.memoryStorage();
+} else {
+    // Disk storage for local development: file is available as file.path
+    const uploadDir = path.join(__dirname, '../../uploads');
+    if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
+    storage = multer.diskStorage({
+        destination: (req, file, cb) => cb(null, uploadDir),
+        filename: (req, file, cb) => {
+            const unique = Date.now() + '-' + Math.round(Math.random() * 1e9);
+            cb(null, unique + path.extname(file.originalname || '.bin'));
+        }
+    });
+}
 
 const upload = multer({
     storage,

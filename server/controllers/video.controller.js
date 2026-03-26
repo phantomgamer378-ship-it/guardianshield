@@ -61,7 +61,7 @@ exports.analyzeVideo = async (req, res) => {
             console.error('DB log error (non-fatal):', dbErr.message);
         }
 
-        // Cleanup uploaded file
+        // Cleanup uploaded file (only on disk)
         cleanupFile(file.path);
 
         return res.json({ isDeepfake, confidence, analysisDetails, factors });
@@ -122,7 +122,7 @@ exports.analyzeVoice = async (req, res) => {
             console.error('DB log error (non-fatal):', dbErr.message);
         }
 
-        // Cleanup uploaded file
+        // Cleanup uploaded file (only on disk)
         cleanupFile(file.path);
 
         return res.json({ isAI, confidenceScore, analysisDetails, factors });
@@ -196,7 +196,8 @@ async function analyzeVideoWithSightengine(file) {
 async function analyzeVoiceWithHuggingFace(file) {
     const fetch = (...args) => import('node-fetch').then(({ default: f }) => f(...args));
 
-    const audioBuffer = fs.readFileSync(file.path);
+    // Support both disk (file.path) and memory (file.buffer) uploads
+    const audioBuffer = file.buffer || fs.readFileSync(file.path);
 
     // Using HF Inference API with audio classification model for AI detection
     const response = await fetch(
@@ -255,8 +256,8 @@ async function analyzeVoiceWithHuggingFace(file) {
 //  Uses file metadata + statistical analysis to generate intelligent results
 // ─────────────────────────────────────────────────────────────────────────────
 async function analyzeVideoHeuristic(file) {
-    const stats = fs.statSync(file.path);
-    const fileSizeBytes = stats.size;
+    // Support both disk (file.path) and memory (file.buffer) uploads
+    const fileSizeBytes = file.size || (file.buffer ? file.buffer.length : 0);
     const fileSizeMB = fileSizeBytes / (1024 * 1024);
     const ext = (file.originalname || file.filename || '').toLowerCase();
 
@@ -315,8 +316,8 @@ async function analyzeVideoHeuristic(file) {
 //  SMART HEURISTIC VOICE ANALYSIS (No external API needed)
 // ─────────────────────────────────────────────────────────────────────────────
 async function analyzeVoiceHeuristic(file, hfFailed = false) {
-    const stats = fs.statSync(file.path);
-    const fileSizeBytes = stats.size;
+    // Support both disk (file.path) and memory (file.buffer) uploads
+    const fileSizeBytes = file.size || (file.buffer ? file.buffer.length : 0);
     const fileSizeMB = fileSizeBytes / (1024 * 1024);
     const ext = (file.originalname || file.filename || '').toLowerCase();
 

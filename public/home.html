@@ -9,13 +9,7 @@
         content="GuardianShield AI-powered scam detection dashboard. Scan phone numbers, detect deepfakes and voice clones.">
 
     <!-- ⚡ Theme init: runs before CSS paints to prevent FOUC -->
-    <script>
-        (function () {
-            var saved = localStorage.getItem('gs-theme');
-            // Default to dark if nothing saved
-            document.documentElement.setAttribute('data-theme', saved === 'light' ? 'light' : 'dark');
-        })();
-    </script>
+    <script src="js/theme-init.js"></script>
 
     <link rel="stylesheet" href="css/style.css">
 
@@ -505,8 +499,12 @@
         </main>
     </div><!-- /gs-layout -->
 
+
+
     <script src="js/api.js"></script>
+    <script src="js/theme-toggle.js"></script>
     <script src="js/dashboard.js"></script>
+    <script src="js/shapegrid.js"></script>
 
     <!-- Spline loader fade-out: fires when iframe is ready -->
     <script>
@@ -524,6 +522,7 @@
         })();
     </script>
 
+    <canvas class="shapegrid-canvas" id="shapegrid-canvas"></canvas>
 </body>
 
 </html>

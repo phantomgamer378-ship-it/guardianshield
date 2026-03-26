@@ -1433,47 +1433,47 @@ body::after {
 
 [data-theme="light"] {
     /* Surfaces */
-    --col-bg: #f5f7f5;
-    /* very soft sage-white page bg */
+    --col-bg: #f6fff8;
+    /* lush soft mint background */
     --col-surface: #ffffff;
-    /* card white */
-    --col-surface-2: #eef3ee;
-    /* elevated / input bg, light sage tint */
-    --col-border: rgba(74, 108, 74, 0.12);
-    --col-border-glow: rgba(74, 108, 74, 0.3);
+    /* clear crisp white */
+    --col-surface-2: #f0fdf4;
+    /* light green-tinted white for inputs */
+    --col-border: rgba(16, 185, 129, 0.15);
+    --col-border-glow: rgba(16, 185, 129, 0.35);
 
-    /* Accent — olive / sage green */
-    --col-accent: #4a7c59;
-    /* sage green primary */
-    --col-accent-2: #3a6347;
-    /* deep olive green */
-    --col-accent-3: #5a9e6a;
-    /* lighter leaf green */
-    --col-danger: #c0392b;
-    --col-warning: #d97706;
-    --col-success: #2f7d4f;
+    /* Accent — stitching / vibrant green */
+    --col-accent: #10b981;
+    /* emerald green */
+    --col-accent-2: #059669;
+    /* deeper teal-green */
+    --col-accent-3: #34d399;
+    /* bright mint */
+    --col-danger: #ef4444;
+    --col-warning: #f59e0b;
+    --col-success: #10b981;
 
     /* Text */
-    --col-text: #1a2e1f;
-    /* dark forest green-black */
-    --col-text-muted: #5a7a5a;
-    /* muted olive */
-    --col-text-dim: #9db89d;
-    /* very muted */
+    --col-text: #064e3b;
+    /* very dark green text */
+    --col-text-muted: #047857;
+    /* muted teal text */
+    --col-text-dim: #10b981;
+    /* vibrant but dim */
 
-    /* Glows — softer for light mode */
-    --glow-accent: 0 0 20px rgba(74, 108, 74, 0.18);
-    --glow-danger: 0 0 14px rgba(192, 57, 43, 0.18);
-    --glow-success: 0 0 14px rgba(47, 125, 79, 0.18);
-    --glow-card: 0 4px 20px rgba(0, 0, 0, 0.08);
+    /* Glows — fresh green pops */
+    --glow-accent: 0 0 25px rgba(16, 185, 129, 0.25);
+    --glow-danger: 0 0 14px rgba(239, 68, 68, 0.18);
+    --glow-success: 0 0 14px rgba(16, 185, 129, 0.18);
+    --glow-card: 0 8px 30px rgba(0, 0, 0, 0.04);
 }
 
 /* Light mode — background orbs */
 [data-theme="light"] body::before {
     background:
-        radial-gradient(ellipse 80% 50% at 20% 10%, rgba(74, 108, 74, 0.08) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(90, 158, 106, 0.07) 0%, transparent 55%),
-        radial-gradient(ellipse 50% 30% at 60% 20%, rgba(58, 99, 71, 0.05) 0%, transparent 50%);
+        radial-gradient(ellipse 80% 50% at 20% 10%, rgba(16, 185, 129, 0.12) 0%, rgba(246, 255, 248, 0) 60%),
+        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(52, 211, 153, 0.10) 0%, rgba(246, 255, 248, 0) 55%),
+        radial-gradient(ellipse 50% 30% at 60% 20%, rgba(5, 150, 105, 0.08) 0%, rgba(246, 255, 248, 0) 50%);
 }
 
 /* Light mode — subtle grid becomes barely visible */
@@ -1486,47 +1486,47 @@ body::after {
 
 /* Light mode — navbar */
 [data-theme="light"] .gs-nav {
-    background: rgba(245, 247, 245, 0.88);
-    border-bottom: 1px solid rgba(74, 108, 74, 0.12);
+    background: rgba(246, 255, 248, 0.88);
+    border-bottom: 1px solid rgba(16, 185, 129, 0.15);
 }
 
 /* Light mode — sidebar */
 [data-theme="light"] .gs-sidebar {
-    background: rgba(245, 247, 245, 0.9);
-    border-right: 1px solid rgba(74, 108, 74, 0.12);
+    background: rgba(246, 255, 248, 0.9);
+    border-right: 1px solid rgba(16, 185, 129, 0.15);
 }
 
 /* Light mode — profile btn */
 [data-theme="light"] .gs-profile-btn {
     background: #ffffff;
-    border-color: rgba(74, 108, 74, 0.18);
+    border-color: rgba(16, 185, 129, 0.2);
 }
 
 [data-theme="light"] .gs-profile-btn:hover {
     border-color: var(--col-accent);
-    box-shadow: 0 0 12px rgba(74, 108, 74, 0.15);
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);
 }
 
 /* Light mode — dropdown */
 [data-theme="light"] .gs-dropdown {
     background: #ffffff;
-    border-color: rgba(74, 108, 74, 0.12);
+    border-color: rgba(16, 185, 129, 0.15);
     box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12);
 }
 
 [data-theme="light"] .gs-dropdown-item:hover {
-    background: rgba(74, 108, 74, 0.06);
+    background: rgba(16, 185, 129, 0.1);
 }
 
 /* Light mode — stat card glow strips */
 [data-theme="light"] .gs-stat-card.blue:hover {
-    border-color: rgba(74, 108, 74, 0.4);
-    box-shadow: 0 0 30px rgba(74, 108, 74, 0.12);
+    border-color: rgba(16, 185, 129, 0.4);
+    box-shadow: 0 0 30px rgba(16, 185, 129, 0.15);
 }
 
 [data-theme="light"] .gs-stat-card.green:hover {
-    border-color: rgba(47, 125, 79, 0.4);
-    box-shadow: 0 0 30px rgba(47, 125, 79, 0.12);
+    border-color: rgba(5, 150, 105, 0.4);
+    box-shadow: 0 0 30px rgba(5, 150, 105, 0.15);
 }
 
 [data-theme="light"] .gs-stat-card.red:hover {
@@ -1536,23 +1536,23 @@ body::after {
 
 /* Light mode nav btn active */
 [data-theme="light"] .gs-nav-btn.active {
-    background: rgba(74, 108, 74, 0.1);
-    border-color: rgba(74, 108, 74, 0.22);
+    background: rgba(16, 185, 129, 0.15);
+    border-color: rgba(16, 185, 129, 0.3);
     color: var(--col-accent);
 }
 
 /* Light mode — table */
 [data-theme="light"] .gs-table thead th {
-    background: rgba(74, 108, 74, 0.04);
+    background: rgba(16, 185, 129, 0.06);
 }
 
 [data-theme="light"] .gs-table tbody tr:hover {
-    background: rgba(74, 108, 74, 0.04);
+    background: rgba(16, 185, 129, 0.06);
 }
 
 /* Light mode — progress bar */
 [data-theme="light"] .fill-green {
-    box-shadow: 0 0 6px rgba(47, 125, 79, 0.4);
+    box-shadow: 0 0 6px rgba(5, 150, 105, 0.4);
 }
 
 [data-theme="light"] .fill-red {
@@ -1561,16 +1561,46 @@ body::after {
 
 /* Light mode — info box */
 [data-theme="light"] .gs-info-box {
-    background: rgba(74, 108, 74, 0.06);
-    border-color: rgba(74, 108, 74, 0.18);
+    background: rgba(16, 185, 129, 0.08);
+    border-color: rgba(16, 185, 129, 0.22);
     color: var(--col-accent-2);
 }
 
 /* Light mode nav pill */
 [data-theme="light"] .gs-nav-pill {
-    background: rgba(47, 125, 79, 0.08);
-    border-color: rgba(47, 125, 79, 0.18);
+    background: rgba(5, 150, 105, 0.1);
+    border-color: rgba(5, 150, 105, 0.22);
     color: var(--col-success);
+}
+
+/* Light mode — animated hero mesh and overlay */
+[data-theme="light"] .gs-mesh-hero {
+    background: radial-gradient(circle at 15% 50%, rgba(16, 185, 129, 0.15), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(52, 211, 153, 0.15), transparent 25%);
+    background-color: var(--col-surface-2);
+}
+
+[data-theme="light"] .gs-mesh-hero::before {
+    background:
+        conic-gradient(from 90deg at 50% 50%, rgba(246, 255, 248, 0) 50%, var(--col-border-glow) 100%),
+        radial-gradient(circle at center, rgba(246, 255, 248, 0) 30%, var(--col-bg) 60%);
+}
+
+[data-theme="light"] .gs-hero-overlay {
+    background: linear-gradient(to top, rgba(246, 255, 248, 0.95) 0%, rgba(246, 255, 248, 0.5) 60%, transparent 100%);
+}
+
+[data-theme="light"] .gs-hero-overlay h1 {
+    background: linear-gradient(135deg, var(--col-text) 30%, var(--col-accent-2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+}
+
+[data-theme="light"] .gs-hero-overlay p {
+    color: var(--col-text-muted);
+    text-shadow: none;
 }
 
 /* ============================================================
@@ -1682,4 +1712,14 @@ body::after {
     justify-content: center;
     flex-shrink: 0;
     transition: opacity var(--dur-fast);
+}
+
+.shapegrid-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -3;
+  pointer-events: none;
 }

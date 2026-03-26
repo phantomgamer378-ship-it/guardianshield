@@ -20,6 +20,7 @@
             }
         }
     </script>
+    <script src="js/theme-init.js"></script>
 </head>
 
 <body class="bg-gray-50 flex min-h-screen">
@@ -131,6 +132,28 @@
 
         <!-- Right Login Section -->
         <div class="flex items-center justify-center p-8 bg-white relative">
+            
+            <!-- THEME TOGGLE (Absolute positioned for login) -->
+            <div class="absolute top-6 right-6 z-50">
+                <div id="theme-toggle" class="theme-toggle" role="button" tabindex="0" aria-label="Toggle light/dark mode" title="Toggle theme">
+                    <div class="theme-toggle-knob" id="toggle-knob">
+                        <svg id="knob-icon-moon" class="icon-moon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+                        </svg>
+                        <svg id="knob-icon-sun" class="icon-sun-gray" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 7a5 5 0 100 10A5 5 0 0012 7z" />
+                        </svg>
+                    </div>
+                    <div class="theme-toggle-passive" id="toggle-passive">
+                        <svg id="passive-icon-sun" class="icon-sun-gray" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 7a5 5 0 100 10A5 5 0 0012 7z" />
+                        </svg>
+                        <svg id="passive-icon-moon" class="icon-moon" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
             <div class="w-full max-w-[420px]">
                 <!-- Mobile Logo -->
                 <div class="lg:hidden flex items-center justify-center gap-2 text-lg font-semibold mb-12">
@@ -233,6 +256,7 @@
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/auth-animation.js"></script>
+    <script src="js/theme-toggle.js"></script>
 </body>
 
 </html>

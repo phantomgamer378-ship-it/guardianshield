@@ -14,48 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    // =========================================================
-    // 1.5 THEME TOGGLE
-    // =========================================================
-    const themeToggleBtn = document.getElementById('theme-toggle');
-    const knobIconMoon = document.getElementById('knob-icon-moon');
-    const knobIconSun = document.getElementById('knob-icon-sun');
-    const passiveIconSun = document.getElementById('passive-icon-sun');
-    const passiveIconMoon = document.getElementById('passive-icon-moon');
 
-    function updateToggleIcons(theme) {
-        if (!knobIconMoon) return;
-        if (theme === 'light') {
-            knobIconMoon.style.display = 'none';
-            knobIconSun.style.display = 'block';
-            passiveIconSun.style.display = 'none';
-            passiveIconMoon.style.display = 'block';
-        } else {
-            knobIconMoon.style.display = 'block';
-            knobIconSun.style.display = 'none';
-            passiveIconSun.style.display = 'block';
-            passiveIconMoon.style.display = 'none';
-        }
-    }
-
-    if (themeToggleBtn) {
-        // Init run
-        updateToggleIcons(document.documentElement.getAttribute('data-theme') || 'dark');
-
-        themeToggleBtn.addEventListener('click', () => {
-            const current = document.documentElement.getAttribute('data-theme') || 'dark';
-            const nextTheme = current === 'dark' ? 'light' : 'dark';
-
-            // Set DOM attribute for CSS
-            document.documentElement.setAttribute('data-theme', nextTheme);
-
-            // Save preference
-            localStorage.setItem('gs-theme', nextTheme);
-
-            // Swap SVG icons instantly
-            updateToggleIcons(nextTheme);
-        });
-    }
 
     // =========================================================
     // 2. LOAD USER PROFILE
