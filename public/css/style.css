@@ -95,6 +95,44 @@ a {
 }
 
 /* ============================================================
+   GLOBAL INPUT TEXT FIX — ensures typed text is always visible
+   on dark backgrounds regardless of Tailwind or browser defaults
+   ============================================================ */
+input,
+textarea,
+select {
+    color: var(--col-text);
+    caret-color: var(--col-text);
+    -webkit-text-fill-color: var(--col-text);
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: var(--col-text-muted);
+    -webkit-text-fill-color: var(--col-text-muted);
+    opacity: 1;
+}
+
+/* Fix browser autofill injecting white background + black text */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px var(--col-surface-2) inset !important;
+    -webkit-text-fill-color: var(--col-text) !important;
+    caret-color: var(--col-text);
+}
+
+[data-theme="light"] input:-webkit-autofill,
+[data-theme="light"] input:-webkit-autofill:hover,
+[data-theme="light"] input:-webkit-autofill:focus,
+[data-theme="light"] input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px var(--col-surface-2) inset !important;
+    -webkit-text-fill-color: var(--col-text) !important;
+    caret-color: var(--col-text);
+}
+
+/* ============================================================
    3. SCROLLBAR
    ============================================================ */
 ::-webkit-scrollbar {
