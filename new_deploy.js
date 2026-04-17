@@ -1,7 +1,7 @@
 'use strict';
 /**
  * new_deploy.js — Creates a fresh Netlify site and deploys GuardianShield
- * Usage: node new_deploy.js
+ * Usage: node new_deploy.js.
  */
 
 const https  = require('https');
