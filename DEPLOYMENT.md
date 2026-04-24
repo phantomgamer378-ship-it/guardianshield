@@ -114,3 +114,5 @@ curl -X POST http://localhost:3000/api/auth/register \
 - Configure database backups
 - Use environment-specific secrets management
 - Set up CI/CD pipeline for automated deployments
+
+- 
